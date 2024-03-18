@@ -1,0 +1,606 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 11,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "power_monitoring"
+      ],
+      "targetBlank": false,
+      "title": "Power Monitoring Dashboards",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "amp"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "9.4.7",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb"
+          },
+          "query": "myWindow = if int(v: v.windowPeriod) > int(v: 2s) then v.windowPeriod else 2s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"current\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: myWindow, fn: mean, createEmpty: true)\r\n  |> keep(columns:[\"_time\",\"_value\",\"phase\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Current",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "json_api"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "voltamp"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.4.7",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "json_api"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.[*].power_apparent",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.[*].timestamp",
+              "language": "jsonpath",
+              "name": "",
+              "type": "time"
+            }
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "machine",
+              "${machine}"
+            ],
+            [
+              "from",
+              "${__from:date:iso}"
+            ],
+            [
+              "to",
+              "${__to:date:iso}"
+            ],
+            [
+              "bucket",
+              "${const_bucket}"
+            ],
+            [
+              "window",
+              "2s"
+            ],
+            [
+              "",
+              ""
+            ]
+          ],
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/power/apparent"
+        }
+      ],
+      "title": "Apparent Power",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "volt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "9.4.7",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb"
+          },
+          "query": "myWindow = if int(v: v.windowPeriod) > int(v: 2s) then v.windowPeriod else 2s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"voltage\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: myWindow, fn: mean, createEmpty: true)\r\n  |> keep(columns:[\"_time\",\"_value\",\"phase\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Voltage",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "json_api"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "watt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.4.7",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "json_api"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.[*].power_real",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.[*].timestamp",
+              "language": "jsonpath",
+              "name": "",
+              "type": "time"
+            }
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "machine",
+              "${machine}"
+            ],
+            [
+              "from",
+              "${__from:date:iso}"
+            ],
+            [
+              "to",
+              "${__to:date:iso}"
+            ],
+            [
+              "bucket",
+              "${const_bucket}"
+            ],
+            [
+              "window",
+              "2s"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/power/real"
+        }
+      ],
+      "title": "Real Power",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "rothz"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 12
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "9.4.7",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb"
+          },
+          "query": "myWindow = if int(v: v.windowPeriod) > int(v: 2s) then v.windowPeriod else 2s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"frequency\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: myWindow, fn: mean, createEmpty: true)\r\n  |> keep(columns:[\"_time\",\"_value\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Frequency",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 12
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "9.4.7",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb"
+          },
+          "query": "myWindow = if int(v: v.windowPeriod) > int(v: 2s) then v.windowPeriod else 2s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"power_factor\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: myWindow, fn: mean, createEmpty: true)\r\n  |> keep(columns:[\"_time\",\"_value\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Measured Power Factor",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "voltamp"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.4.7",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb"
+          },
+          "query": "from(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"power_reactive\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: true)",
+          "refId": "A"
+        }
+      ],
+      "title": "Reactive Power",
+      "type": "stat"
+    }
+  ],
+  "refresh": "5s",
+  "revision": 1,
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [
+    "power_monitoring"
+  ],
+  "templating": {
+    "list": [
+      {
+        "hide": 2,
+        "label": "Influx Bucket",
+        "name": "const_bucket",
+        "query": "power_monitoring",
+        "skipUrlSync": false,
+        "type": "constant"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "Machine_2",
+          "value": "Machine_2"
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb"
+        },
+        "definition": "from(bucket: \"${const_bucket}\")\r\n  |> range(start: -7d)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> keep(columns: [\"machine\"])\r\n  |> distinct(column: \"machine\")\r\n  |> filter(fn: (r) => r[\"machine\"] != \"null\")\r\n  |> group()",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "machine",
+        "options": [],
+        "query": "from(bucket: \"${const_bucket}\")\r\n  |> range(start: -7d)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> keep(columns: [\"machine\"])\r\n  |> distinct(column: \"machine\")\r\n  |> filter(fn: (r) => r[\"machine\"] != \"null\")\r\n  |> group()",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Live (Individual)",
+  "uid": "UJ85b47Iz",
+  "version": 3,
+  "weekStart": ""
+}
