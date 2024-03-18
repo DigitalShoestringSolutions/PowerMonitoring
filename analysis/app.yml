@@ -1,10 +1,11 @@
 version: '2'
 
 services:
-    app:
-        build: .
-        volumes:
-          - ./config:/config:ro
-        ports:
-          - "8000:80"
- 
+  app:
+    build: .
+    environment:
+      - CONFIG__INFLUX__TOKEN=${DB_ADMIN_INITIAL_TOKEN}
+    ports:
+      - '8000:80'
+    volumes:
+      - ./config:/app/config:ro

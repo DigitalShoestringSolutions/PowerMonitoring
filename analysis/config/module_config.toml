@@ -2,7 +2,7 @@
 	default_voltage=230
 [config.influx]
 	url="http://timeseries-db.docker.local:8086"
-	token = "E6WDAMki-zNqWraxS3mgr8VVF6KiAleptIX8XXb7erlTQ8ukauVkIViQmQIgq2ds6IMZh7A-8b8xhxZhNqiWXA=="
+	token = "<Should be overwritten by environment variable>"
 	org = "SHOESTRING"
 [config.power_factor]
 	default = 1.0

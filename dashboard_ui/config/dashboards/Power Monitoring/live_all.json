@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 4,
   "links": [
     {
       "asDropdown": true,
@@ -187,7 +187,7 @@
           "params": [
             [
               "from",
-              "${__from:date:iso}"
+              "-1h"
             ],
             [
               "to",
@@ -207,7 +207,7 @@
           "urlPath": "/energy/total"
         }
       ],
-      "title": "Total Energy Used by each Machine in Timeframe",
+      "title": "Total Energy Used in the Last Hour",
       "transformations": [
         {
           "id": "organize",
@@ -314,7 +314,7 @@
             ],
             [
               "window",
-              "2s"
+              "${__interval_ms}"
             ]
           ],
           "queryParams": "",
@@ -362,6 +362,6 @@
   "timezone": "",
   "title": "Live (All)",
   "uid": "tqo0A-nIk",
-  "version": 4,
+  "version": 6,
   "weekStart": ""
 }

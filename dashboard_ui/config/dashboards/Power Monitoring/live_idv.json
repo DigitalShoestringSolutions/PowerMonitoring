@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 11,
+  "id": 5,
   "links": [
     {
       "asDropdown": true,
@@ -191,7 +191,7 @@
             ],
             [
               "window",
-              "2s"
+              "${__interval_ms}"
             ],
             [
               "",
@@ -355,7 +355,7 @@
             ],
             [
               "window",
-              "2s"
+              "${__interval_ms}"
             ]
           ],
           "queryParams": "",
@@ -570,9 +570,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": "Machine_2",
-          "value": "Machine_2"
+          "selected": false,
+          "text": "Machine_1",
+          "value": "Machine_1"
         },
         "datasource": {
           "type": "influxdb",
@@ -594,13 +594,13 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Live (Individual)",
   "uid": "UJ85b47Iz",
-  "version": 3,
+  "version": 5,
   "weekStart": ""
 }
