@@ -78,19 +78,6 @@ services:
             options:
                 tag: docker-graph
         restart: unless-stopped
-    analytics:
-        extends:
-            file: analytics/app.yml
-            service: app
-        networks:
-            internal:
-                aliases:
-                    - analytics.docker.local
-        logging:
-            driver: syslog
-            options:
-                tag: docker-analytics
-        restart: unless-stopped       
 
     analysis:
         extends:

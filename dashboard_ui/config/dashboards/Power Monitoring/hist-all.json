@@ -55,6 +55,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "series",
             "axisLabel": "",
@@ -69,6 +70,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineStyle": {
               "fill": "solid"
@@ -82,7 +84,7 @@
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -142,7 +144,7 @@
             "uid": "influxdb"
           },
           "hide": false,
-          "query": "myWindow = if int(v: v.windowPeriod) > int(v: 2s) then v.windowPeriod else 2s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"current\")\r\n  |> aggregateWindow(every: myWindow, fn: mean, createEmpty: false)\r\n  |> pivot(columnKey: [\"_field\"], rowKey: [\"_time\"], valueColumn: \"_value\")\r\n  |> group(columns: [\"machine\",\"_time\"])\r\n  |> sum(column: \"current\")\r\n  |> group(columns: [\"machine\"])\r\n  |> keep(columns: [\"current\",\"_time\",\"machine\"])",
+          "query": "limited_window = if int(v: v.windowPeriod) > int(v: 1s) then v.windowPeriod else 1s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"current\")\r\n  |> aggregateWindow(every: limited_window, fn: mean, createEmpty: false)\r\n  |> pivot(columnKey: [\"_field\"], rowKey: [\"_time\"], valueColumn: \"_value\")\r\n  |> group(columns: [\"machine\",\"_time\"])\r\n  |> sum(column: \"current\")\r\n  |> group(columns: [\"machine\"])\r\n  |> keep(columns: [\"current\",\"_time\",\"machine\"])",
           "refId": "B"
         }
       ],
@@ -201,9 +203,11 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "cacheDurationSeconds": 300,
@@ -251,7 +255,6 @@
         }
       ],
       "title": "Total Energy Usage in Timeframe",
-      "transformations": [],
       "type": "stat"
     },
     {
@@ -265,6 +268,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "series",
             "axisLabel": "",
@@ -279,6 +283,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineStyle": {
               "fill": "solid"
@@ -292,7 +297,7 @@
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -372,7 +377,7 @@
             ],
             [
               "window",
-              "${__interval_ms}"
+              "${__interval}"
             ],
             [
               "bucket",
@@ -407,6 +412,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "series",
             "axisLabel": "",
@@ -421,6 +427,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "stepBefore",
             "lineStyle": {
               "fill": "solid"
@@ -434,7 +441,7 @@
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -539,10 +546,8 @@
       "type": "timeseries"
     }
   ],
-  "refresh": "5s",
   "revision": 1,
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [
     "power_monitoring"
   ],
@@ -561,7 +566,7 @@
         "auto_count": 30,
         "auto_min": "10s",
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "1h",
           "value": "1h"
         },
@@ -641,6 +646,6 @@
   "timezone": "",
   "title": "Historic (All)",
   "uid": "sPrzJ-nSk",
-  "version": 4,
+  "version": 6,
   "weekStart": ""
 }

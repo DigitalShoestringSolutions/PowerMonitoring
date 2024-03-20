@@ -5,12 +5,13 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Colors,
   Legend,
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import { Line, Bar } from 'react-chartjs-2';
 import APIBackend from './RestAPI'
 
 import * as dayjs from 'dayjs'
@@ -27,11 +28,45 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Colors,
   Legend
 );
+
+function set_alpha(colour, alpha) {
+  let out = colour
+  // Regex to extract the numbers from a string like this "rgba(255,159,64,0.5)"
+  let rgba = colour.match(/^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+[\.]?\d*)\s*\)$/i);
+  if (rgba) {
+    out = "rgba(" + rgba[1] + "," + rgba[2] + "," + rgba[3] + "," + alpha + ")";
+  }
+  else {
+    let rgb = colour.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
+    if (rgb) {
+      out = "rgba(" + rgb[1] + "," + rgb[2] + "," + rgb[3] + "," + alpha + ")";
+    }
+  }
+  return out
+}
+
+//from example here: https://github.com/chartjs/Chart.js/blob/master/docs/samples/legend/events.md
+function handleHover(evt, item, legend) {
+  legend.chart.data.datasets.forEach((dataset, index) => {
+    dataset.backgroundColor = index === item.datasetIndex ? dataset.backgroundColor : set_alpha(dataset.backgroundColor, 0.2);
+    dataset.borderColor = index === item.datasetIndex ? dataset.borderColor : set_alpha(dataset.borderColor, 0.1);
+  });
+  legend.chart.update();
+}
+
+function handleLeave(evt, item, legend) {
+  legend.chart.data.datasets.forEach((dataset) => {
+    dataset.backgroundColor = set_alpha(dataset.backgroundColor, 0.5);
+    dataset.borderColor = set_alpha(dataset.borderColor, 1.0);
+  });
+  legend.chart.update();
+}
 
 
 export const options = {
@@ -40,6 +75,8 @@ export const options = {
   plugins: {
     legend: {
       position: 'top',
+      onHover: handleHover,
+      onLeave: handleLeave
     },
     // title: {
     //   display: true,
@@ -97,14 +134,14 @@ function Graph({ config }) {
   let [error, setError] = React.useState(null)
 
   let [data, setData] = React.useState({})
-  let [period, setPeriod] = React.useState(undefined)
+  let [type, setType] = React.useState("line")
 
   React.useEffect(() => {
     const do_load = async () => {
       setPending(true)
 
       let params = new URLSearchParams(window.location.search);
-      setPeriod(params.get("period"))
+      setType(params.get("graph"))
 
       let url = (config.source.host ? config.source.host : window.location.hostname) + (config.source.port ? ":" + config.source.port : "")
       let path = window.location.pathname
@@ -131,79 +168,28 @@ function Graph({ config }) {
   if (!loaded) {
     return error ? error : "Loading..."
   }
-
-  let out = {}
-  let x = []
-  let series = []
-
-  const formats = {
-    '10m': {
-      x_index: (d) => Math.ceil(d.minute() / 10) * 10,
-      x_label: "mm",
-      s_index: "DD/MM/YY HH",
-      s_label: "HH:00 ddd DD/MM "
-    },
-    '1h': {
-      x_index: (d) => d.hour(),
-      x_label: "HH:00",
-      s_index: "DD/MM/YY",
-      s_label: "ddd DD/MM"
-    },
-    '1d': {
-      x_index: (d) => d.day(),
-      x_label: "ddd",
-      s_index: "w",
-      s_label: "[week] w"
-    },
-    '1w': {
-      x_index: (d) => d.week(),
-      x_label: "[week] w",
-      s_index: "YY",
-      s_label: "YYYY"
-    }
+  if (data?.buckets?.length == 0) {
+    return <h1>No data to display</h1>
   }
 
-  data.forEach(entry => {
-    let d = dayjs(entry._time)
-    let x_index = formats[period].x_index(d)
-    let x_label = d.format(formats[period].x_label)
-    let series_index = d.format(formats[period].s_index)
-    let series_label = d.format(formats[period].s_label)
-    let s_entry = out[x_index]
-
-    if (s_entry === undefined) {
-      s_entry = {}
-      out[x_index] = s_entry
-    }
-    s_entry[series_index] = entry._value
-
-    if (x.findIndex(elem => elem.index === x_index) === -1) {
-      x.push({ index: x_index, label: x_label })
-    }
-
-    if (series.findIndex(elem => elem.index === series_index) === -1) {
-      series.push({ index: series_index, label: series_label })
-    }
-  });
-
-  let x_sorted = x.sort((a, b) => a.index - b.index)
-  // let series_sorted = series.sort((a, b) => a.index - b.index)
-  let series_sorted = series
-
-  console.log(series)
-
   let graph_data = {
-    labels: x_sorted.map(entry => entry.label),
-    datasets: series_sorted.map(s_entry => ({
-      label: s_entry.label,
-      data: x_sorted.map(x_entry => out[x_entry.index] ? out[x_entry.index][s_entry.index] : undefined),
+    labels: data.buckets,
+    datasets: Object.keys(data.series).map(series_key => ({
+      label: series_key,
+      data: data.series[series_key],
       borderWidth: 1
     }))
   };
 
+  console.log(type)
   return (
-    <Line options={options} data={graph_data} />
-  );
+    <div id="frame">
+      {type === "line" ?
+        <Line options={options} data={graph_data} />
+        : <Bar options={options} data={graph_data} />
+      }
+    </div>
+  )
 }
 
 

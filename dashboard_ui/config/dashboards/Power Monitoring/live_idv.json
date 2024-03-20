@@ -87,22 +87,23 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "value_and_name"
+        "textMode": "value_and_name",
+        "wideLayout": true
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
             "uid": "influxdb"
           },
-          "query": "myWindow = if int(v: v.windowPeriod) > int(v: 2s) then v.windowPeriod else 2s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"current\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: myWindow, fn: mean, createEmpty: true)\r\n  |> keep(columns:[\"_time\",\"_value\",\"phase\"])",
+          "query": "limited_window = if int(v: v.windowPeriod) > int(v: 1s) then v.windowPeriod else 1s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"current\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: limited_window, fn: mean, createEmpty: true)\r\n  |> keep(columns:[\"_time\",\"_value\",\"phase\"])",
           "refId": "A"
         }
       ],
       "title": "Current",
-      "transformations": [],
       "type": "stat"
     },
     {
@@ -149,9 +150,11 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "cacheDurationSeconds": 300,
@@ -191,7 +194,7 @@
             ],
             [
               "window",
-              "${__interval_ms}"
+              "${__interval}"
             ],
             [
               "",
@@ -250,22 +253,23 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "value_and_name"
+        "textMode": "value_and_name",
+        "wideLayout": true
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
             "uid": "influxdb"
           },
-          "query": "myWindow = if int(v: v.windowPeriod) > int(v: 2s) then v.windowPeriod else 2s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"voltage\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: myWindow, fn: mean, createEmpty: true)\r\n  |> keep(columns:[\"_time\",\"_value\",\"phase\"])",
+          "query": "limited_window = if int(v: v.windowPeriod) > int(v: 1s) then v.windowPeriod else 1s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"voltage\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: limited_window, fn: mean, createEmpty: true)\r\n  |> keep(columns:[\"_time\",\"_value\",\"phase\"])",
           "refId": "A"
         }
       ],
       "title": "Voltage",
-      "transformations": [],
       "type": "stat"
     },
     {
@@ -313,9 +317,11 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "cacheDurationSeconds": 300,
@@ -355,7 +361,7 @@
             ],
             [
               "window",
-              "${__interval_ms}"
+              "${__interval}"
             ]
           ],
           "queryParams": "",
@@ -410,22 +416,23 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "value"
+        "textMode": "value",
+        "wideLayout": true
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
             "uid": "influxdb"
           },
-          "query": "myWindow = if int(v: v.windowPeriod) > int(v: 2s) then v.windowPeriod else 2s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"frequency\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: myWindow, fn: mean, createEmpty: true)\r\n  |> keep(columns:[\"_time\",\"_value\"])",
+          "query": "limited_window = if int(v: v.windowPeriod) > int(v: 1s) then v.windowPeriod else 1s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"frequency\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: limited_window, fn: mean, createEmpty: true)\r\n  |> keep(columns:[\"_time\",\"_value\"])",
           "refId": "A"
         }
       ],
       "title": "Frequency",
-      "transformations": [],
       "type": "stat"
     },
     {
@@ -472,22 +479,23 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "value"
+        "textMode": "value",
+        "wideLayout": true
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
             "uid": "influxdb"
           },
-          "query": "myWindow = if int(v: v.windowPeriod) > int(v: 2s) then v.windowPeriod else 2s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"power_factor\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: myWindow, fn: mean, createEmpty: true)\r\n  |> keep(columns:[\"_time\",\"_value\"])",
+          "query": "limited_window = if int(v: v.windowPeriod) > int(v: 1s) then v.windowPeriod else 1s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"power_factor\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: limited_window, fn: mean, createEmpty: true)\r\n  |> keep(columns:[\"_time\",\"_value\"])",
           "refId": "A"
         }
       ],
       "title": "Measured Power Factor",
-      "transformations": [],
       "type": "stat"
     },
     {
@@ -534,16 +542,18 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
             "uid": "influxdb"
           },
-          "query": "from(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"power_reactive\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: true)",
+          "query": "limited_window = if int(v: v.windowPeriod) > int(v: 1s) then v.windowPeriod else 1s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"power_reactive\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: limited_window, fn: mean, createEmpty: true)",
           "refId": "A"
         }
       ],
@@ -553,8 +563,7 @@
   ],
   "refresh": "5s",
   "revision": 1,
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [
     "power_monitoring"
   ],
@@ -601,6 +610,6 @@
   "timezone": "",
   "title": "Live (Individual)",
   "uid": "UJ85b47Iz",
-  "version": 5,
+  "version": 6,
   "weekStart": ""
 }

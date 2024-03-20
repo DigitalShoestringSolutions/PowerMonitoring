@@ -54,6 +54,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "series",
             "axisLabel": "",
@@ -68,6 +69,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineStyle": {
               "fill": "solid"
@@ -121,6 +123,13 @@
               {
                 "id": "unit",
                 "value": "watt"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -133,6 +142,66 @@
               {
                 "id": "custom.lineInterpolation",
                 "value": "stepBefore"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Energy"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "current A"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "current B"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "current C"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
               }
             ]
           }
@@ -195,7 +264,7 @@
             ],
             [
               "window",
-              "${__interval_ms}"
+              "${__interval}"
             ],
             [
               "bucket",
@@ -259,7 +328,7 @@
             "uid": "influxdb"
           },
           "hide": false,
-          "query": "from(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"current\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> pivot(columnKey: [\"_field\"], rowKey: [\"_time\"], valueColumn: \"_value\")\r\n  |> keep(columns: [\"power\",\"current\",\"_time\",\"phase\"])",
+          "query": "limited_window = if int(v: v.windowPeriod) > int(v: 1s) then v.windowPeriod else 1s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"current\")\r\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\r\n  |> aggregateWindow(every: limited_window, fn: mean, createEmpty: true)\r\n  |> pivot(columnKey: [\"_field\"], rowKey: [\"_time\"], valueColumn: \"_value\")\r\n  |> keep(columns: [\"power\",\"current\",\"_time\",\"phase\"])",
           "refId": "Current"
         }
       ],
@@ -315,9 +384,11 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
           "cacheDurationSeconds": 300,
@@ -361,8 +432,7 @@
   ],
   "refresh": "",
   "revision": 1,
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [
     "power_monitoring"
   ],
@@ -378,9 +448,9 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": "Machine_2",
-          "value": "Machine_2"
+          "selected": true,
+          "text": "Machine_1",
+          "value": "Machine_1"
         },
         "datasource": {
           "type": "influxdb",
@@ -404,7 +474,7 @@
         "auto_count": 30,
         "auto_min": "10s",
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "1h",
           "value": "1h"
         },
@@ -484,6 +554,6 @@
   "timezone": "",
   "title": "Historic (Individual)",
   "uid": "B25PaV7Sk",
-  "version": 7,
+  "version": 5,
   "weekStart": ""
 }

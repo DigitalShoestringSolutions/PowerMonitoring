@@ -35,3 +35,17 @@
 	module="electical"
 	function="energy_total"
 	[routes.energy_total.config]
+	
+[routes.period]
+	path="/period"
+	methods=["get"]
+	module="electical"
+	function="period_comparison"
+	[routes.period.config]
+
+[routes.top10]
+	path="/period/top10"
+	methods=["get"]
+	module="electical"
+	function="top_10"
+	[routes.top10.config]

@@ -1,7 +1,7 @@
 #=-= Define Interface Modules =-=
 [interface.mb1]
     module="modbus"
-    class="ModbusTCPSync"
+    class="ModbusTCPAsync"
 [interface.mb1.config]
     adapter_addr="192.168.0.7"
     adapter_port=502

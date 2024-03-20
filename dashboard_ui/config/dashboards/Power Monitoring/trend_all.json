@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 8,
+  "id": 6,
   "links": [
     {
       "asDropdown": true,
@@ -61,17 +61,17 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": " <iframe id=\"embeddedFrame\" src=\"#\" width=\"100%\" height=\"100%\"> </iframe>\r\n<script>\r\nvar iframe = document.getElementById(\"embeddedFrame\");\r\n    iframe.src = \"http://\"+window.location.hostname+\"${analysis_sm}\"+\"/all_graph?bucket=${const_bucket}&period=${period}&from=${__from}&to=${__to}\"\r\n\r\n    function setIframeHeight() {\r\n      iframe.style.height = iframe.parentElement.offsetHeight + \"px\";\r\n    }\r\n\r\n    // Call setIframeHeight when the iframe content is loaded\r\n    //iframe.onload = setIframeHeight;\r\n\r\n    window.addEventListener(\"resize\", setIframeHeight);\r\n</script>",
+        "content": " <iframe id=\"embeddedFrame\" src=\"#\" width=\"100%\" height=\"100%\"> </iframe>\r\n<script>\r\nvar iframe = document.getElementById(\"embeddedFrame\");\r\n    iframe.src = \"http://\"+window.location.hostname+\"${graph_sm}\"+\"/period?bucket=${const_bucket}&window=${period}&graph=${graph}&from=${__from:date:iso}&to=${__to:date:iso}&total=true\"\r\n\r\n    function setIframeHeight() {\r\n      iframe.style.height = iframe.parentElement.offsetHeight + \"px\";\r\n    }\r\n\r\n    // Call setIframeHeight when the iframe content is loaded\r\n    //iframe.onload = setIframeHeight;\r\n\r\n    window.addEventListener(\"resize\", setIframeHeight);\r\n</script>",
         "mode": "html"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.4.0",
       "title": "Period over Period Comparison",
       "type": "text"
     },
     {
       "datasource": {
-        "type": "influxdb",
-        "uid": "influxdb"
+        "type": "marcusolsson-json-datasource",
+        "uid": "json_api"
       },
       "fieldConfig": {
         "defaults": {
@@ -92,50 +92,22 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
-          "unit": "watt"
+          "unit": "watth"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Time"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 170
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 141
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 16,
+        "h": 12,
         "w": 6,
         "x": 18,
         "y": 0
       },
-      "id": 3,
+      "id": 8,
       "options": {
+        "cellHeight": "sm",
         "footer": {
           "countRows": false,
           "fields": "",
@@ -144,33 +116,72 @@
           ],
           "show": false
         },
-        "showHeader": true,
-        "sortBy": []
+        "showHeader": true
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "10.4.0",
       "targets": [
         {
+          "cacheDurationSeconds": 300,
           "datasource": {
-            "type": "influxdb",
-            "uid": "influxdb"
+            "type": "marcusolsson-json-datasource",
+            "uid": "json_api"
           },
-          "query": "from(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"power\")\r\n  |> window(every: ${period})\r\n  |> mean()\r\n  |> duplicate(column: \"_start\", as: \"start\")\r\n  |> group(columns: [\"start\"])\r\n  |> sum()\r\n  |> group()\r\n  |> sort(columns:[\"_value\"], desc: true)\r\n  |> limit(n:10, offset: 0)",
-          "refId": "A"
+          "fields": [
+            {
+              "jsonPath": "$.[*].energy",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.[*].timestamp",
+              "language": "jsonpath",
+              "name": "",
+              "type": "time"
+            }
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "from",
+              "${__from:date:iso}"
+            ],
+            [
+              "to",
+              "${__to:date:iso}"
+            ],
+            [
+              "window",
+              "${period}"
+            ],
+            [
+              "bucket",
+              "${const_bucket}"
+            ],
+            [
+              "total",
+              "true"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/period/top10"
         }
       ],
-      "title": "Top 10 power usage periods",
+      "title": "Top 10 energy usage periods",
       "transformations": [
         {
           "id": "organize",
           "options": {
             "excludeByName": {},
+            "includeByName": {},
             "indexByName": {
-              "_value": 1,
-              "start": 0
+              "power_real": 1,
+              "timestamp": 0
             },
             "renameByName": {
+              "_start": "Period",
               "_value": "Value",
-              "start": "Period"
+              "power_real": "Average Power",
+              "timestamp": "Timestamp"
             }
           }
         }
@@ -179,8 +190,8 @@
     },
     {
       "datasource": {
-        "type": "influxdb",
-        "uid": "influxdb"
+        "type": "marcusolsson-json-datasource",
+        "uid": "json_api"
       },
       "fieldConfig": {
         "defaults": {
@@ -188,6 +199,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -201,6 +213,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -230,23 +243,24 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "watth"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 4,
         "w": 18,
         "x": 0,
         "y": 16
       },
-      "id": 7,
+      "id": 9,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -255,22 +269,57 @@
       },
       "targets": [
         {
+          "cacheDurationSeconds": 300,
           "datasource": {
-            "type": "influxdb",
-            "uid": "influxdb"
+            "type": "marcusolsson-json-datasource",
+            "uid": "json_api"
           },
-          "query": "from(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"power\")\r\n  |> aggregateWindow(every: ${period}, fn: mean, createEmpty: false)\r\n  |> group(columns: [\"_time\"])\r\n  |> sum()\r\n  |> group()",
-          "refId": "A"
+          "fields": [
+            {
+              "jsonPath": "$.[*].energy",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$.[*].timestamp",
+              "language": "jsonpath",
+              "name": "",
+              "type": "time"
+            }
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "from",
+              "${__from:date:iso}"
+            ],
+            [
+              "to",
+              "${__to:date:iso}"
+            ],
+            [
+              "window",
+              "${period}"
+            ],
+            [
+              "bucket",
+              "${const_bucket}"
+            ],
+            [
+              "total",
+              "true"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/energy/bucket"
         }
       ],
-      "title": "Power",
+      "title": "Energy over Timeframe",
       "type": "timeseries"
     }
   ],
-  "refresh": "",
   "revision": 1,
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [
     "power_monitoring"
   ],
@@ -288,57 +337,85 @@
         "current": {
           "selected": false,
           "text": "hour",
-          "value": "1h"
+          "value": "10m"
         },
         "hide": 0,
         "includeAll": false,
-        "label": "Time Period",
+        "label": "Trend Type",
         "multi": false,
         "name": "period",
         "options": [
           {
-            "selected": false,
-            "text": "10 minutes",
-            "value": "10m"
-          },
-          {
             "selected": true,
             "text": "hour",
-            "value": "1h"
+            "value": "10m"
           },
           {
             "selected": false,
             "text": "day",
-            "value": "1d"
+            "value": "1h"
           },
           {
             "selected": false,
             "text": "week",
+            "value": "1d"
+          },
+          {
+            "selected": false,
+            "text": "year",
             "value": "1w"
           }
         ],
-        "query": "10 minutes : 10m,hour : 1h, day : 1d, week : 1w",
+        "query": "hour : 10m, day : 1h, week : 1d, year : 1w",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
       },
       {
         "hide": 2,
-        "name": "analysis_sm",
-        "query": ":80",
+        "name": "graph_sm",
+        "query": ":8080",
         "skipUrlSync": false,
         "type": "constant"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "Line",
+          "value": "line"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Graph",
+        "multi": false,
+        "name": "graph",
+        "options": [
+          {
+            "selected": true,
+            "text": "Line",
+            "value": "line"
+          },
+          {
+            "selected": false,
+            "text": "Bar",
+            "value": "bar"
+          }
+        ],
+        "query": "Line : line, Bar : bar",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
       }
     ]
   },
   "time": {
-    "from": "now-30d",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Trend (All)",
   "uid": "i6b8d74Ik",
-  "version": 9,
+  "version": 14,
   "weekStart": ""
 }

@@ -7,4 +7,4 @@ services:
                 - /etc/localtime:/etc/localtime:ro
                 - ./config/ui:/usr/share/nginx/html/config/
             ports:
-                - "80:80"
+                - "8080:80"

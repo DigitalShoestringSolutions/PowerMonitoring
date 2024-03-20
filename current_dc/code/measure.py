@@ -97,16 +97,16 @@ class BuildingBlockFramework(multiprocessing.Process):
 
                 await asyncio.sleep(delay)
             except core.exceptions.SampleError as e:
-                logger.error(f"Sample Error for device {e.device}: {e} - pausing for 30 seconds")
+                logger.error(f"Sample Error for device {e.device}: {e} - pausing for 10 seconds")
                 self.dispatch_error('device',e.device,str(e))
-                await asyncio.sleep(30)
+                await asyncio.sleep(10)
             except core.exceptions.CalculationError as e:
-                logger.error(f"Sample Error for device {e.module}: {e} - pausing for 30 seconds")
+                logger.error(f"Sample Error for device {e.module}: {e} - pausing for 10 seconds")
                 self.dispatch_error('calculation',e.module,str(e))
-                await asyncio.sleep(30)
+                await asyncio.sleep(10)
             except Exception as e:
-                logger.error(f"Error during sampling: {traceback.format_exc()} - pausing for 30 seconds")
-                await asyncio.sleep(30)
+                logger.error(f"Error during sampling: {traceback.format_exc()} - pausing for 10 seconds")
+                await asyncio.sleep(10)
 
         logger.info("Done")
 

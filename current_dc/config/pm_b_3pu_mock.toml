@@ -97,7 +97,7 @@
 [output.phase]
     path = "power_monitoring/{{machine}}/{{phase}}"
 [output.phase.spec]
-    machine = "#Machine_2"
+    machine = "#Machine_1"
     timestamp = '$.timestamp'
     current = "$.current_rms"
     phase = "$.phase"

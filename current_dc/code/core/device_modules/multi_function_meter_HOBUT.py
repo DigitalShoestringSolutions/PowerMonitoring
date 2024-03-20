@@ -112,11 +112,11 @@ class HOBUT_850_LTHN:
                 readings[self.varTHD_I3] = await self.read_modbus_register(self.regTHD_I3)
 
             if self.varkW is not None:
-                readings[self.varkW] = await self.read_modbus_register(self.regkW)
+                readings[self.varkW] = await self.read_modbus_register(self.regkW) * 1000 # kW to W
             if self.varkVA is not None:
-                readings[self.varkVA] = await self.read_modbus_register(self.regkVA)
+                readings[self.varkVA] = await self.read_modbus_register(self.regkVA) * 1000 # kVA to VA
             if self.varkVAR is not None:
-                readings[self.varkVAR] = await self.read_modbus_register(self.regkVAR)
+                readings[self.varkVAR] = await self.read_modbus_register(self.regkVAR) * 1000 # kVar to Var
             if self.varHz is not None:
                 readings[self.varHz] = await self.read_modbus_register(self.regHz)
             if self.varPF is not None:
