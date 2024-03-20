@@ -12,6 +12,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line, Bar } from 'react-chartjs-2';
+import autocolors from 'chartjs-plugin-autocolors';
 import APIBackend from './RestAPI'
 
 import * as dayjs from 'dayjs'
@@ -32,7 +33,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Colors,
-  Legend
+  Legend,
+  autocolors
 );
 
 function set_alpha(colour, alpha) {
@@ -78,6 +80,15 @@ export const options = {
       onHover: handleHover,
       onLeave: handleLeave
     },
+    tooltip: {
+      callbacks: {
+        label: function (context) {
+          let point = context.raw;
+          let label= (point/1000).toFixed(2) + ' kWh';
+          return label;
+        }
+      }
+    }
     // title: {
     //   display: true,
     //   text: 'Chart.js Line Chart',
@@ -85,8 +96,18 @@ export const options = {
   },
   interaction: {
     axis: "x",
-    mode: "nearest",
+    mode: "index",
     intersect: false,
+  },
+  scales: {
+    y: {
+      ticks: {
+        // Include a dollar sign in the ticks
+        callback: function (value, index, ticks) {
+          return (value / 1000) + " kWh";
+        }
+      }
+    }
   }
 };
 
