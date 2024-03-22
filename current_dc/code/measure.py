@@ -11,6 +11,7 @@ import core.sensing_stack
 import core.output
 import core.exceptions
 import zmq
+import sys
 
 logger = logging.getLogger("main.measure")
 context = zmq.Context()
@@ -55,6 +56,8 @@ class BuildingBlockFramework(multiprocessing.Process):
         self.zmq_conf = zmq_conf
         self.zmq_out = None
 
+        self.fail_count= 0
+
     def do_connect(self):
         self.zmq_out = context.socket(self.zmq_conf['type'])
         if self.zmq_conf["bind"]:
@@ -94,18 +97,21 @@ class BuildingBlockFramework(multiprocessing.Process):
                     messages = self.generate_output(output_vars, self.output_config)
                     for message in messages:
                         self.dispatch(message)
-
+                self.decrement_fail_counter()
                 await asyncio.sleep(delay)
             except core.exceptions.SampleError as e:
                 logger.error(f"Sample Error for device {e.device}: {e} - pausing for 10 seconds")
+                self.increment_fail_counter()
                 self.dispatch_error('device',e.device,str(e))
                 await asyncio.sleep(10)
             except core.exceptions.CalculationError as e:
                 logger.error(f"Sample Error for device {e.module}: {e} - pausing for 10 seconds")
+                self.increment_fail_counter()
                 self.dispatch_error('calculation',e.module,str(e))
                 await asyncio.sleep(10)
             except Exception as e:
                 logger.error(f"Error during sampling: {traceback.format_exc()} - pausing for 10 seconds")
+                self.increment_fail_counter()
                 await asyncio.sleep(10)
 
         logger.info("Done")
@@ -200,15 +206,15 @@ class BuildingBlockFramework(multiprocessing.Process):
 
         outputs = []
         for _output_item, output_item_config in output_config.items():
-            payload = core.output.generate_json_path_message(dataset, output_item_config['spec'])
+            payload = core.output.generate_json_path_message(dataset, output_item_config['message_spec'])
             # payload = core.output.generate_basic_output(dataset,output_spec)
-            outputs.append({'path': output_item_config.get('path', ""), 'payload': payload})
+            outputs.append({'topic': output_item_config.get('topic', ""), 'payload': payload})
 
         return outputs
 
     def dispatch(self, output):
-        logger.debug(f"dispatch to {output.get('path', '')} of {output['payload']}")
-        self.zmq_out.send_json({'path': output.get('path', ""), 'payload': output['payload']})
+        logger.debug(f"dispatch to {output.get('topic', '')} of {output['payload']}")
+        self.zmq_out.send_json({'topic': output.get('topic', ""), 'payload': output['payload']})
 
     def dispatch_error(self,type,id,reason):
         payload = {
@@ -217,4 +223,13 @@ class BuildingBlockFramework(multiprocessing.Process):
             'reason': reason,
             'timestamp': self.get_timestamp()
         }
-        self.zmq_out.send_json({'path': f'error/{self.name}', 'payload': payload})
+        self.zmq_out.send_json({'topic': f'error/{self.name}', 'payload': payload})
+
+    def decrement_fail_counter(self):
+        self.fail_count = self.fail_count-1 if self.fail_count > 0 else 0
+    
+    def increment_fail_counter(self):
+        self.fail_count +=1
+        if self.fail_count >= 6:
+            logger.critical("Too many failed attempts - hard resetting")
+            sys.exit(255)

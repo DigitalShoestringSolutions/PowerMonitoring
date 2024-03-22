@@ -35,8 +35,8 @@
     constants = {'phase'='single'}
     
 [output.single_phase]
-    path = "power_monitoring/{{machine}}/{{phase}}"
-[output.single_phase.spec]
+    topic = "power_monitoring/{{machine}}/{{phase}}"
+[output.single_phase.message_spec]
     machine = "#Lab_Int_1P"
     timestamp = '$.timestamp'
     current = "$.current_rms"
@@ -45,7 +45,7 @@
 [mqtt]
     broker = "mqtt.docker.local"
     port = 1883   #common mqtt ports are 1883 and 8883
-    base_topic_template = ""
+    topic_prefix = ""
 
     #reconnection characteristics
     # start: timeout = initial,

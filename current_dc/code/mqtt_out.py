@@ -27,7 +27,7 @@ class MQTTServiceWrapper(multiprocessing.Process):
         self.url = mqtt_conf['broker']
         self.port = int(mqtt_conf['port'])
 
-        self.topic_base = mqtt_conf.get('base_topic_template',"")
+        self.topic_base = mqtt_conf.get('topic_prefix',"")
 
         self.initial = mqtt_conf['reconnect'].get('initial',5)
         self.backoff = mqtt_conf['reconnect'].get('backoff',2)
@@ -90,9 +90,9 @@ class MQTTServiceWrapper(multiprocessing.Process):
                 try:
                     msg = self.zmq_in.recv(zmq.NOBLOCK)
                     msg_json = json.loads(msg)
-                    msg_path = msg_json['path']
+                    msg_topic = msg_json['topic']
                     msg_payload = msg_json['payload']
-                    topic = chevron.render(urljoin(self.topic_base, msg_path), msg_payload)
+                    topic = chevron.render(urljoin(self.topic_base, msg_topic), msg_payload)
                     logger.info(f'pub topic:{topic} msg:{msg_payload}')
                     client.publish(topic, json.dumps(msg_payload))
                 except zmq.ZMQError:

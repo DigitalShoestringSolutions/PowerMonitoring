@@ -9,6 +9,9 @@ import analysis_modules.utilities as utilities
 
 logger = logging.getLogger(__name__)
 
+# query
+# process
+# format
 
 async def real_power(args):
     '''
@@ -113,7 +116,7 @@ async def __query_current_and_power(args, power_type):
     window_original = Interval(params.get("window"))
 
     try:
-        minimum_window = Interval("2s")
+        minimum_window = Interval("5s")
         if window_original < minimum_window:
             window = minimum_window
         else:

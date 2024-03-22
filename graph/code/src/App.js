@@ -84,7 +84,8 @@ export const options = {
       callbacks: {
         label: function (context) {
           let point = context.raw;
-          let label= (point/1000).toFixed(2) + ' kWh';
+          let series = context.dataset.label
+          let label= series+" "+(point/1000).toFixed(2) + ' kWh';
           return label;
         }
       }

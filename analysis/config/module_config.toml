@@ -15,6 +15,7 @@
 	function="real_power"
 	[routes.real_power.config]
 
+
 [routes.apparent_power]
 	path="/power/apparent"
 	methods=["get"]

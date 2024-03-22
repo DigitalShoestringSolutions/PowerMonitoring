@@ -3,6 +3,7 @@ version: '2'
 services:
   app:
     build: .
+    command: ["python","main.py","--log","info"]
     environment:
       - CONFIG__INFLUX__TOKEN=${DB_ADMIN_INITIAL_TOKEN}
     ports:

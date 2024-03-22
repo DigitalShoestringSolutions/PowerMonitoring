@@ -77,16 +77,16 @@
 #     machine="#Machine_1"
 
 [output.phase_a]
-    path = "power_monitoring/{{machine}}/{{phase}}"
-[output.phase_a.spec]
+    topic = "power_monitoring/{{machine}}/{{phase}}"
+[output.phase_a.message_spec]
     machine = "#Lab_Basic_3PB"
     timestamp = '$.timestamp'
     current = "$.current_rms"
     phase = "#A"
 
 [output.phase_b]
-    path = "power_monitoring/{{machine}}/{{phase}}"
-[output.phase_b.spec]
+    topic = "power_monitoring/{{machine}}/{{phase}}"
+[output.phase_b.message_spec]
     machine = "#Lab_Basic_3PB"
     timestamp = '$.timestamp'
     current = "$.current_rms"
@@ -94,8 +94,8 @@
 
 
 [output.phase_c]
-    path = "power_monitoring/{{machine}}/{{phase}}"
-[output.phase_c.spec]
+    topic = "power_monitoring/{{machine}}/{{phase}}"
+[output.phase_c.message_spec]
     machine = "#Lab_Basic_3PB"
     timestamp = '$.timestamp'
     current = "$.current_rms"
@@ -103,9 +103,12 @@
 
 
 [mqtt]
+    # URL of the mqtt broker
     broker = "mqtt.docker.local"
+    # Port to use when connecting to the broker
     port = 1883   #common mqtt ports are 1883 and 8883
-    base_topic_template = ""
+    # prefix to prepend to the topic of all published messages
+    topic_prefix = ""
 
     #reconnection characteristics
     # start: timeout = initial,

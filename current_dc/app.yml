@@ -3,9 +3,9 @@ version: "2"
 services:
     app:
         build: .
-        command: ["python","main.py","--log","debug"]
+        command: ["python","main.py","--log","info"]
         privileged: true
         volumes:
             - ./config:/app/config
         environment:
-            - DCSM_CONFIG=/app/config/pm_b_3pu_mock.toml
+            - MODULE_CONFIG_FILE=/app/config/pm_b_3pu_mock.toml
