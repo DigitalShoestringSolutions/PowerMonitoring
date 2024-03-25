@@ -7,5 +7,3 @@ services:
         privileged: true
         volumes:
             - ./config:/app/config
-        environment:
-            - MODULE_CONFIG_FILE=/app/config/pm_b_3pu_mock.toml

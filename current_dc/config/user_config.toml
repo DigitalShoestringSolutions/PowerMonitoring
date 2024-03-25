@@ -1,2 +1,0 @@
-calculation.current_clamp.config.nominal_current = 50
-device.adc_0.config.adc_channel = 0

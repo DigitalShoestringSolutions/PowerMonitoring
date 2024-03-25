@@ -14,13 +14,19 @@ logger = logging.getLogger("config")
 
 
 def get_config(arg_module_file=None, arg_user_file=None):
-    module_config_file, module_config_src = select_file(
-        arg_module_file, "MODULE_CONFIG_FILE", "./config/module_config.toml")
     user_config_file, user_config_src = select_file(
         arg_user_file, "USER_CONFIG_FILE", "./config/user_config.toml")
 
-    module_config = load_config(module_config_file, module_config_src)
     user_config = load_config(user_config_file, user_config_src)
+    user_config_specified_module_config_file = user_config.get(
+        "module_config_file", None)
+
+    other_module_config_sources = [
+        (user_config_specified_module_config_file, "user config")]
+    module_config_file, module_config_src = select_file(
+        arg_module_file, "MODULE_CONFIG_FILE", "./config/module_config.toml", other_sources=other_module_config_sources)
+
+    module_config = load_config(module_config_file, module_config_src)
 
     with open("./config_schema.json", "rb") as f:
         schema = json.load(f)
@@ -36,8 +42,12 @@ def get_config(arg_module_file=None, arg_user_file=None):
     return combined_config
 
 
-def select_file(arg_file, env_var, default):
+def select_file(arg_file, env_var, default, other_sources=[]):
     config_file = (default, "default")
+    
+    for file, src in other_sources:
+        if file:
+            config_file = (file, src)
 
     if arg_file:
         config_file = (arg_file, "args")

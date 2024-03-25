@@ -3,7 +3,7 @@ version: "2"
 services:
     timeseries-db:
         extends:
-            file: timeseries_sds/app.yml
+            file: timeseries_datastorage/app.yml
             service: db
         networks:
             internal:
@@ -18,7 +18,7 @@ services:
             - "mqtt_broker"
     timeseries-db-input:
         extends:
-            file: timeseries_sds/app.yml
+            file: timeseries_datastorage/app.yml
             service: telegraf
         networks:
             internal:
@@ -34,33 +34,33 @@ services:
             - "mqtt_broker"
     dashboard:
         extends:
-            file: dashboard_ui/app.yml
+            file: dashboards/app.yml
             service: app
         networks:
             internal:
                 aliases:
-                    - dashboard-ui.docker.local
+                    - dashboards.docker.local
         logging:
             driver: syslog
             options:
-                tag: docker-dashboard-ui
+                tag: docker-dashboards
         restart: unless-stopped
         depends_on:
             - "mqtt_broker"
  
    
-    current-collection:
+    current-sensing:
         extends:
-            file: current_dc/app.yml
+            file: current_sensing/app.yml
             service: app
         networks:
             internal:
                 aliases:
-                    - current-dc.docker.local
+                    - current-sensing.docker.local
         logging:
             driver: syslog
             options:
-                tag: docker-current-dc
+                tag: docker-current-sensing
         restart: unless-stopped
         depends_on:
             - "mqtt_broker"
