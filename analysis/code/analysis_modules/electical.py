@@ -186,7 +186,7 @@ async def __query_current_and_power_integral(args):
                 |> filter(fn: (r) => r["_field"] == "current" or r["_field"] == "power_real")
                 {f'|> filter(fn: (r) => r["machine"] == "{machine}")' if machine is not None else ''}
                 |> group(columns: ["machine","_field","phase"])
-                |> aggregateWindow(every: {window}, fn: integral, createEmpty: true)
+                |> aggregateWindow(every: {window}, fn: integral, createEmpty: true, timeSrc:"_start")
                 {'|> group(columns: ["machine","_field","_time"])' if total != "true" else '|> group(columns: ["_field","_time"])'}
                 |> sum()
                 |> pivot(columnKey: ["_field"], rowKey: ["_time"], valueColumn: "_value")
