@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 7,
+  "id": 3,
   "links": [
     {
       "asDropdown": true,
@@ -214,7 +214,7 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "stepAfter",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -433,13 +433,13 @@
     ]
   },
   "time": {
-    "from": "now-30d",
+    "from": "now-2d",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Trend (Individual)",
   "uid": "YrR-YV7Ik",
-  "version": 18,
+  "version": 2,
   "weekStart": ""
 }

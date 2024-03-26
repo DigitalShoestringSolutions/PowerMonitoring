@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6,
+  "id": 2,
   "links": [
     {
       "asDropdown": true,
@@ -214,7 +214,7 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "stepAfter",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -416,6 +416,6 @@
   "timezone": "browser",
   "title": "Trend (All)",
   "uid": "i6b8d74Ik",
-  "version": 14,
+  "version": 2,
   "weekStart": ""
 }
