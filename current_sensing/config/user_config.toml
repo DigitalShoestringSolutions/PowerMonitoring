@@ -1,3 +1,5 @@
-calculation.current_clamp.config.nominal_current = 50
-device.adc_0.config.adc_channel = 0
+# calculation.current_clamp.config.nominal_current = 50
+# device.adc_0.config.adc_channel = 0
+# device.adc_1.config.adc_channel = 1
+# device.adc_2.config.adc_channel = 2
 module_config_file = "./config/pm_b_3pu_mock.toml"
