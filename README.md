@@ -1,2 +1,2 @@
 # Power Monitoring Starter Solution
-Run with docker: `docker compose up --build`
+Run with Docker: `docker compose build && ./start.sh`
