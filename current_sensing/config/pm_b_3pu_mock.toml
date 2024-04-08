@@ -36,6 +36,13 @@
     variable = "v_amp_out"
 
 #=-= Define Calculation Modules =-=
+[calculation.machine_name]
+    module="gen_constants"
+    class="ConstantSet"
+[calculation.machine_name.config]
+    machine = "Machine_1"
+[calculation.machine_name.variables]
+
 [calculation.rms_current]
     module="gen_electrical"
     class="RMSToPeak"
@@ -63,7 +70,7 @@
 
 #=-= Define Calculation Pipelines =-=
 [pipelines]
-    rms_current = ["rms_current","current_clamp","amplifier"]
+    rms_current = ["rms_current","current_clamp","amplifier","machine_name"]
 
 #=-= Define Measurements Pipelines =-=
 [measurement]
@@ -97,7 +104,7 @@
 [output.phase]
     topic = "power_monitoring/{{machine}}/{{phase}}"
 [output.phase.message_spec]
-    machine = "#Machine_1"
+    machine = "$.machine"
     timestamp = '$.timestamp'
     current = "$.current_rms"
     phase = "$.phase"
