@@ -24,11 +24,17 @@
 
 
 #=-= Define Calculation Modules =-=
-[calculation]
+[calculation.machine_name]
+    module="gen_constants"
+    class="ConstantSet"
+[calculation.machine_name.config]
+    machine = "Machine_1"
+[calculation.machine_name.variables]
+
 
 #=-= Define Calculation Pipelines =-=
 [pipelines]
-    empty_pipeline = []
+    pipeline = ["machine_name"]
 
 #=-= Define Measurements Pipelines =-=
 [measurement]
@@ -38,14 +44,14 @@
     period = 1.0 # seconds
 [[measurement.sensing_stacks]]
     device = "mfm1"
-    pipeline = "empty_pipeline"
+    pipeline = "pipeline"
     constants = {'phase'='single'}
 
 [output.overall]
     path = "power_monitoring/{{machine}}"
 [output.overall.spec]
     timestamp = '$.timestamp'
-    machine = "#Lab_Adv_1P"
+    machine = "$.machine"
     power_real = '$.power_real'
     power_reactive = '$.power_reactive'
     power_apparent = '$.power_apparent'
@@ -55,7 +61,7 @@
 [output.single_phase]
     topic = "power_monitoring/{{machine}}/{{phase}}"
 [output.single_phase.message_spec]
-    machine = "#Lab_Adv_1P"
+    machine = "$.machine"
     timestamp = '$.timestamp'
     current = "$.current_rms"
     voltage = "$.measured_phase_voltage"

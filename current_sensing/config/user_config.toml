@@ -8,6 +8,9 @@
 # module_config_file = "./config/pm_a_3p.toml"             # Advanced (inc. voltage monitoring) three phase
 module_config_file = "./config/pm_b_3pu_mock.toml"       # Basic three phase unbalanced simulator
 
+#   Set the machine name
+calculation.machine_name.config.machine = "Machine_Name_Here"
+
 #   If using Basic hardware, set the ratio of the current transformer clamps (written on the clamp)
 # calculation.current_clamp.config.nominal_current = 50    # Amps for 1V output
 #   For Intermediate and Advanced hardware this is the current in that produces 5A out 

@@ -26,6 +26,13 @@
     v_in = "v_amp_out"
 
 #=-= Define Calculation Modules =-=
+[calculation.machine_name]
+    module="gen_constants"
+    class="ConstantSet"
+[calculation.machine_name.config]
+    machine = "Machine_1"
+[calculation.machine_name.variables]
+
 [calculation.power]
     module="gen_electrical"
     class="PowerToCurrent"
@@ -63,7 +70,7 @@
 
 #=-= Define Calculation Pipelines =-=
 [pipelines]
-    single_clamp = ["power","rms_current","current_clamp","amplifier"]
+    single_clamp = ["power","rms_current","current_clamp","amplifier","machine_name"]
 
 #=-= Define Measurements Pipelines =-=
 [measurement]
@@ -84,7 +91,7 @@
     power = '$.power'
     current = "$.current_rms"
     phase = "$.phase"
-    machine="#Lab_Basic_1P"
+    machine="$.machine"
 
 
 [mqtt]

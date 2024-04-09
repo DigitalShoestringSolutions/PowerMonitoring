@@ -17,11 +17,17 @@
     I1 = "current_rms"
 
 #=-= Define Calculation Modules =-=
-[calculation]
+[calculation.machine_name]
+    module="gen_constants"
+    class="ConstantSet"
+[calculation.machine_name.config]
+    machine = "Machine_1"
+[calculation.machine_name.variables]
+
 
 #=-= Define Calculation Pipelines =-=
 [pipelines]
-    empty_pipeline = []
+    pipeline = ["machine_name"]
 
 #=-= Define Measurements Pipelines =-=
 [measurement]
@@ -31,13 +37,13 @@
     period = 1.0 # seconds
 [[measurement.sensing_stacks]]
     device = "mfm1"
-    pipeline = "empty_pipeline"
+    pipeline = "pipeline"
     constants = {'phase'='single'}
     
 [output.single_phase]
     topic = "power_monitoring/{{machine}}/{{phase}}"
 [output.single_phase.message_spec]
-    machine = "#Lab_Int_1P"
+    machine = "$.machine"
     timestamp = '$.timestamp'
     current = "$.current_rms"
     phase = "$.phase"
