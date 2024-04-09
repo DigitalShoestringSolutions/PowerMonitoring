@@ -9,6 +9,8 @@ import uvicorn
 from starlette.applications import Starlette
 from starlette.responses import JSONResponse
 from starlette.routing import Route
+from starlette.middleware import Middleware
+from starlette.middleware.cors import CORSMiddleware
 
 import config_manager
 
@@ -16,8 +18,8 @@ logger = logging.getLogger("main")
 
 
 @lru_cache
-def get_settings(module_file,user_file):
-    return config_manager.get_config(module_file,user_file)
+def get_settings(module_file, user_file):
+    return config_manager.get_config(module_file, user_file)
 
 
 async def catch_request(request):
@@ -101,7 +103,11 @@ if __name__ == "__main__":
               methods=['GET', 'POST']),
     ]
 
-    app = Starlette(routes=routes)
+    middleware = [
+        Middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'],allow_headers=['*'])
+    ]
+
+    app = Starlette(routes=routes, middleware=middleware)
     app.state.settings = get_settings(
         args.get('module_config_file'), args.get('user_config_file'))
 
