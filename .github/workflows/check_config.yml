@@ -15,11 +15,11 @@ jobs:
           python-version: 3.9
       - name: Install dependencies
         run: |
-          cd current_sensing
+          cd ./current_sensing
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest
       - name: Run tests with pytest
         run: |
-          cd code
+          cd ./code
           pytest 
