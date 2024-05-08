@@ -52,7 +52,7 @@
 
 [output.overall]
     topic = "power_monitoring/{{machine}}"
-[output.overall.spec]
+[output.overall.message_spec]
     timestamp = '$.timestamp'
     machine = "$.machine"
     power_real = '$.power_real'
@@ -63,7 +63,7 @@
     
 [output.phase_a]
     topic = "power_monitoring/{{machine}}/{{phase}}"
-[output.phase_a.spec]
+[output.phase_a.message_spec]
     machine = "$.machine"
     timestamp = '$.timestamp'
     current = "$.I_A"
@@ -72,7 +72,7 @@
 
 [output.phase_b]
     topic = "power_monitoring/{{machine}}/{{phase}}"
-[output.phase_b.spec]
+[output.phase_b.message_spec]
     machine = "$.machine"
     timestamp = '$.timestamp'
     current = "$.I_B"
