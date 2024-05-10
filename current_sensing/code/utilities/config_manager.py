@@ -69,6 +69,7 @@ def load_config(filename, src):
     except FileNotFoundError:
         logger.critical(
             f'Config File Not Found - unable to load config file "{filename}" specified by {src}.')
+        logger.critical("Unable to start solution - please specify a valid config file or make sure the service module can access the file specified")
         sys.exit(255)
 
 
@@ -79,6 +80,7 @@ def do_validate(config, schema, label=""):
     except jsonschema.ValidationError as v_err:
         logger.critical(
             f"CONFIG ERROR on {label} - {v_err.json_path} >> {v_err.message}")
+        logger.critical("Config File is not valid -- unable to start the solution -- please correct the issues flagged above and try again.")
         sys.exit(255)
 
 
