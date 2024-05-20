@@ -9,6 +9,7 @@ import json
 import os
 import logging
 import sys
+import time
 
 logger = logging.getLogger("config")
 
@@ -81,7 +82,9 @@ def do_validate(config, schema, label=""):
         logger.critical(
             f"CONFIG ERROR on {label} - {v_err.json_path} >> {v_err.message}")
         logger.critical("Config File is not valid -- unable to start the solution -- please correct the issues flagged above and try again.")
-        sys.exit(255)
+        while True:
+            logger.critical("Config File not valid - Going to sleep to avoid unnecessary restarts")     
+            time.sleep(36000)        
 
 
 def combine(A, B):
