@@ -5,8 +5,8 @@
 # module_config_file = "./config/pm_i_1p.toml"             # Intermediate single phase
 # module_config_file = "./config/pm_i_3p.toml"             # Intermediate three phase
 # module_config_file = "./config/pm_a_1p.toml"             # Advanced (inc. voltage monitoring) single phase
- module_config_file = "./config/pm_a_3p.toml"             # Advanced (inc. voltage monitoring) three phase
-#module_config_file = "./config/pm_b_3pu_mock.toml"       # Basic three phase unbalanced simulator
+# module_config_file = "./config/pm_a_3p.toml"             # Advanced (inc. voltage monitoring) three phase
+module_config_file = "./config/pm_b_3pu_mock.toml"       # Basic three phase unbalanced simulator
 
 #   Set the machine name
 calculation.machine_name.config.machine = "Machine_Name_Here"
