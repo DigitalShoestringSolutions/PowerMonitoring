@@ -9,6 +9,7 @@ import json
 import os
 import logging
 import sys
+import time
 
 logger = logging.getLogger("config")
 
@@ -69,7 +70,10 @@ def load_config(filename, src):
     except FileNotFoundError:
         logger.critical(
             f'Config File Not Found - unable to load config file "{filename}" specified by {src}.')
-        sys.exit(255)
+        logger.critical("Unable to start solution - please specify a valid config file or make sure the service module can access the file specified")
+        while True:
+            logger.critical("Config File not found - Going to sleep to avoid unnecessary restarts")     
+            time.sleep(36000)        
 
 
 def do_validate(config, schema, label=""):
@@ -79,7 +83,10 @@ def do_validate(config, schema, label=""):
     except jsonschema.ValidationError as v_err:
         logger.critical(
             f"CONFIG ERROR on {label} - {v_err.json_path} >> {v_err.message}")
-        sys.exit(255)
+        logger.critical("Config File is not valid -- unable to start the solution -- please correct the issues flagged above and try again.")
+        while True:
+            logger.critical("Config File not valid - Going to sleep to avoid unnecessary restarts")     
+            time.sleep(36000)        
 
 
 def combine(A, B):

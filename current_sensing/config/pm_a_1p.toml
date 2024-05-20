@@ -48,8 +48,8 @@
     constants = {'phase'='single'}
 
 [output.overall]
-    path = "power_monitoring/{{machine}}"
-[output.overall.spec]
+    topic = "power_monitoring/{{machine}}"
+[output.overall.message_spec]
     timestamp = '$.timestamp'
     machine = "$.machine"
     power_real = '$.power_real'

@@ -51,8 +51,8 @@
     pipeline = "pipeline"
 
 [output.overall]
-    path = "power_monitoring/{{machine}}"
-[output.overall.spec]
+    topic = "power_monitoring/{{machine}}"
+[output.overall.message_spec]
     timestamp = '$.timestamp'
     machine = "$.machine"
     power_real = '$.power_real'
@@ -62,8 +62,8 @@
     power_factor = '$.PF'
     
 [output.phase_a]
-    path = "power_monitoring/{{machine}}/{{phase}}"
-[output.phase_a.spec]
+    topic = "power_monitoring/{{machine}}/{{phase}}"
+[output.phase_a.message_spec]
     machine = "$.machine"
     timestamp = '$.timestamp'
     current = "$.I_A"
@@ -71,8 +71,8 @@
     phase = "#A"
 
 [output.phase_b]
-    path = "power_monitoring/{{machine}}/{{phase}}"
-[output.phase_b.spec]
+    topic = "power_monitoring/{{machine}}/{{phase}}"
+[output.phase_b.message_spec]
     machine = "$.machine"
     timestamp = '$.timestamp'
     current = "$.I_B"
