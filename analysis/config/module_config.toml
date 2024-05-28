@@ -1,6 +1,4 @@
-#[config]
-#	default_voltage=230
- [config.voltage_line_neutral]
+[config.voltage_line_neutral]
 	default = 230
 [config.influx]
 	url = "http://timeseries-db.docker.local:8086"
