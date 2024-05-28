@@ -1,2 +1,5 @@
 [config.power_factor.machines]
     Machine_1=0.95
+
+[config.voltage_line_neutral.machines]
+    Machine_1=230
