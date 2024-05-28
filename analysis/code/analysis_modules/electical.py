@@ -62,9 +62,9 @@ async def __get_real_power(args):
                 power_real = record["power_real"]
             else:
                 power_factor = machine_power_factors.get(
-                    record.values.get("machine"), default_power_factor)
+                    machine, default_power_factor)
                 voltage = machine_voltages.get(
-                    record.values.get("machine"), default_voltage)
+                    machine, default_voltage)
                 current = record.values.get("current")
                 power_real = current * voltage * \
                     power_factor if current is not None else None
@@ -99,8 +99,10 @@ async def apparent_power(args):
             if record.values.get("power_apparent") is not None:
                 power_apparent = record["power_apparent"]
             else:
+                voltage = machine_voltages.get(
+                    machine, default_voltage)
                 current = record.values.get("current")
-                power_apparent = current * default_voltage if current is not None else None
+                power_apparent = current * voltage if current is not None else None
             output.append(
                 {"timestamp": record["_time"].isoformat(), "power_apparent": power_apparent, "machine": machine})
 
@@ -251,7 +253,7 @@ async def __get_energy(args):
                 power_factor = machine_power_factors.get(
                     machine, default_power_factor)
                 voltage = machine_voltages.get(
-                    record.values.get(machine), default_voltage)
+                    machine, default_voltage)
                 current_integral = record.values.get("current")
                 power_integral = current_integral * voltage * \
                     power_factor if current_integral is not None else None
@@ -341,7 +343,7 @@ async def energy_total(args):
                 power_factor = machine_power_factors.get(
                     record.values.get(machine), default_power_factor)
                 voltage = machine_voltages.get(
-                    record.values.get(machine), default_voltage)
+                    machine, default_voltage)
                 current_integral = record.values.get("current")
                 power_integral = current_integral * voltage * \
                     power_factor if current_integral is not None else None
