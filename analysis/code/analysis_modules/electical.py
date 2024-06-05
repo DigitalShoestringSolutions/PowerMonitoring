@@ -41,7 +41,11 @@ async def __get_real_power(args):
             },
         ]
     '''
-    default_voltage = args["global_config"]['default_voltage']
+    default_voltage = args["global_config"]["voltage_line_neutral"].get(
+        "default", 230)
+    machine_voltages = args["global_config"]["voltage_line_neutral"].get(
+        "machines", {})
+    
     default_power_factor = args["global_config"]["power_factor"].get(
         "default", 1.0)
     machine_power_factors = args["global_config"]["power_factor"].get(
@@ -58,9 +62,11 @@ async def __get_real_power(args):
                 power_real = record["power_real"]
             else:
                 power_factor = machine_power_factors.get(
-                    record.values.get("machine"), default_power_factor)
+                    machine, default_power_factor)
+                voltage = machine_voltages.get(
+                    machine, default_voltage)
                 current = record.values.get("current")
-                power_real = current * default_voltage * \
+                power_real = current * voltage * \
                     power_factor if current is not None else None
             output.append(
                 {"timestamp": record["_time"], "power_real": power_real, "machine": machine})
@@ -80,8 +86,10 @@ async def apparent_power(args):
             },
         ]
     '''
-    default_voltage = args["global_config"]['default_voltage']
-
+    default_voltage = args["global_config"]["voltage_line_neutral"].get(
+        "default", 230)
+    machine_voltages = args["global_config"]["voltage_line_neutral"].get(
+        "machines", {})
     tables = await __query_current_and_power(args, "power_apparent")
     output = []
 
@@ -91,8 +99,10 @@ async def apparent_power(args):
             if record.values.get("power_apparent") is not None:
                 power_apparent = record["power_apparent"]
             else:
+                voltage = machine_voltages.get(
+                    machine, default_voltage)
                 current = record.values.get("current")
-                power_apparent = current * default_voltage if current is not None else None
+                power_apparent = current * voltage if current is not None else None
             output.append(
                 {"timestamp": record["_time"].isoformat(), "power_apparent": power_apparent, "machine": machine})
 
@@ -221,7 +231,10 @@ async def energy_bucket(args):
 
 
 async def __get_energy(args):
-    default_voltage = args["global_config"]['default_voltage']
+    default_voltage = args["global_config"]["voltage_line_neutral"].get(
+        "default", 230)
+    machine_voltages = args["global_config"]["voltage_line_neutral"].get(
+        "machines", {})
     default_power_factor = args["global_config"]["power_factor"].get(
         "default", 1.0)
     machine_power_factors = args["global_config"]["power_factor"].get(
@@ -239,8 +252,10 @@ async def __get_energy(args):
             else:
                 power_factor = machine_power_factors.get(
                     machine, default_power_factor)
+                voltage = machine_voltages.get(
+                    machine, default_voltage)
                 current_integral = record.values.get("current")
-                power_integral = current_integral * default_voltage * \
+                power_integral = current_integral * voltage * \
                     power_factor if current_integral is not None else None
             energy = power_integral / 3600  # seconds to hours
             output.append(
@@ -264,7 +279,10 @@ async def energy_total(args):
         if machine not specified in params - returns for all machines
         There should be one value in the returned list for each machine
     '''
-    default_voltage = args["global_config"]['default_voltage']
+    default_voltage = args["global_config"]["voltage_line_neutral"].get(
+        "default", 230)
+    machine_voltages = args["global_config"]["voltage_line_neutral"].get(
+        "machines", {})
     default_power_factor = args["global_config"]["power_factor"].get(
         "default", 1.0)
     machine_power_factors = args["global_config"]["power_factor"].get(
@@ -324,8 +342,10 @@ async def energy_total(args):
             else:
                 power_factor = machine_power_factors.get(
                     record.values.get(machine), default_power_factor)
+                voltage = machine_voltages.get(
+                    machine, default_voltage)
                 current_integral = record.values.get("current")
-                power_integral = current_integral * default_voltage * \
+                power_integral = current_integral * voltage * \
                     power_factor if current_integral is not None else None
             energy = power_integral / 3600  # seconds to hours
             output.append(
