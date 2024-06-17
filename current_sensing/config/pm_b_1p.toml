@@ -23,16 +23,6 @@
     machine = "Machine_1"
 [calculation.machine_name.variables]
 
-[calculation.power]
-    module="gen_electrical"
-    class="PowerToCurrent"
-[calculation.power.config]
-    line_voltage = 230
-    phases = 1
-[calculation.power.variables]
-    power_in = "power"
-    rms_current_out = "current_rms"
-
 [calculation.rms_current]
     module="gen_electrical"
     class="RMSToPeak"
