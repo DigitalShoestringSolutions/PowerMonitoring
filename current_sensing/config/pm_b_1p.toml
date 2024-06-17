@@ -21,7 +21,7 @@
     class="I2C"
 [interface.i2c0.config]
     bus=1
-    addr=0x48
+    addr=0x08
 
 #=-= Define Device Modules =-=
 [device.adc_0]
