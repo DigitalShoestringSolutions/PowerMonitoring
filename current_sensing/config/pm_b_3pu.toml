@@ -16,6 +16,13 @@
     speed=1000000
     mode=0
 
+[interface.i2c0]
+    module="i2c"
+    class="I2C"
+[interface.i2c0.config]
+    bus=1
+    addr=0x48
+
 #=-= Define Device Modules =-=
 [device.adc_0]
     module="adc_MCP300X"
