@@ -7,15 +7,6 @@
     addr=0x48
 
 #=-= Define Device Modules =-=
-#[device.adc_0]
-#    module="adc_ADS111X"
-#    class="ADS1115"
-#    interface="i2c0"
-#[device.adc_0.config]
-#    adc_channel=1
-#[device.adc_0.variables]
-#    v_in = "v_amp_out"
-
 [device.adc_0]
     module="adc_grove"
     class="PiHat"
