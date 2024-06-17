@@ -25,7 +25,7 @@
 
 #=-= Define Device Modules =-=
 [device.adc_0]
-    module="adc_MCP300X"
+    module="adc_MCP300X"  # default to BC Robotics ADC
     class="MCP3008"
     interface="spi0"
 [device.adc_0.config]

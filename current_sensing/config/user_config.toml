@@ -17,7 +17,35 @@ calculation.machine_name.config.machine = "Machine_Name_Here"
 # calculation.current_clamp.config.nominal_current = 50    # Amps for 1V output
 
 
-#   If using Basic hardware, set which adc you are using and which channels the clamps are plugged into.
+#   If using Basic hardware, set which adc you are using by uncommenting on of these blocks:
+[device.adc_0]
+    module="adc_MCP300X" # for the BC Robotics ADC
+    class="MCP3008"
+    interface="spi0"
+#[device.adc_0]
+#    module="adc_grove" # for the Grove Base Hat ADC
+#    class="PiHat"
+#    interface="i2c0"
+
+#   If using Basic hardware with multiple clamps, do the same for adc_1 (the second clamp) and adc_2 (the third clamp)
+[device.adc_1]
+    module="adc_MCP300X" # for the BC Robotics ADC
+    class="MCP3008"
+    interface="spi0"
+#[device.adc_1]
+#    module="adc_grove" # for the Grove Base Hat ADC
+#    class="PiHat"
+#    interface="i2c0"
+[device.adc_2]
+    module="adc_MCP300X" # for the BC Robotics ADC
+    class="MCP3008"
+    interface="spi0"
+#[device.adc_2]
+#    module="adc_grove" # for the Grove Base Hat ADC
+#    class="PiHat"
+#    interface="i2c0"
+
+#   If using Basic hardware, set which adc channels the clamps are plugged into.
 #   If using Intermediate or Advanced hardware, comment all these out with a #
 # device.adc_0.config.adc_channel = 0
 # device.adc_1.config.adc_channel = 1                      # If using multiple clamps
