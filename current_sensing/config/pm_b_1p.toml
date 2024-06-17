@@ -3,7 +3,18 @@
     module="spi"
     class="SPI"
 [interface.spi0.config]
+    bus=0
     device=0
+    speed=1000000
+    mode=0
+[interface.spi1]
+    module="spi"
+    class="SPI"
+[interface.spi1.config]
+    bus=0
+    device=1
+    speed=1000000
+    mode=0
 
 #=-= Define Device Modules =-=
 [device.adc_0]
