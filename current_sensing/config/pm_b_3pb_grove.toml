@@ -11,7 +11,7 @@
     class="PiHat"
     interface="i2c0"
 [device.adc_0.config]
-    adc_channel=3
+    adc_channel=0
 [device.adc_0.variables]
     v_in = "v_amp_out"
 
