@@ -1,16 +1,27 @@
 #   Select the config file (by removing the leading #) appropriate for your hardware and wiring setup
-# module_config_file = "./config/pm_b_1p_bc_robotics.toml"             # Basic single phase
-# module_config_file = "./config/pm_b_1p_grove.toml"             # Basic single phase
-# module_config_file = "./config/pm_b_3pb.toml"            # Basic three phase balanced (single clamp)
-# module_config_file = "./config/pm_b_3pu.toml"            # Basic three phase unbalanced (3 clamps)
-# module_config_file = "./config/pm_i_1p.toml"             # Intermediate single phase
-# module_config_file = "./config/pm_i_3p.toml"             # Intermediate three phase
-# module_config_file = "./config/pm_a_1p.toml"             # Advanced (inc. voltage monitoring) single phase
-# module_config_file = "./config/pm_a_3p.toml"             # Advanced (inc. voltage monitoring) three phase
+# Basic
+#module_config_file = "./config/pm_b_1p_bc_robotics.toml"   # Single phase with BC Robotics ADC
+#module_config_file = "./config/pm_b_1p_grove.toml"         # Single phase with Grove ADC
+#module_config_file = "./config/pm_b_3pb_bc_robotics.toml"  # 3 phase balanced (single clamp) with BC Robotics ADC
+#module_config_file = "./config/pm_b_3pb_grove.toml"        # 3 phase balanced (single clamp) with Grove ADC
+#module_config_file = "./config/pm_b_3pu_bc_robotics.toml"  # 3 phase unbalanced (3 clamps) with BC Robotics ADC
+#module_config_file = "./config/pm_b_3pu_grove.toml"        # 3 phase unbalanced (3 clamps) with BC Robotics ADC
+
+# Intermediate
+#module_config_file = "./config/pm_i_1p.toml"             # Intermediate single phase
+#module_config_file = "./config/pm_i_3p.toml"             # Intermediate three phase
+
+# Advanced (inc. voltage monitoring):
+#module_config_file = "./config/pm_a_1p.toml"             # single phase
+#module_config_file = "./config/pm_a_3p.toml"             # three phase
+
+# Simulator for testing without sensing hardware:
 module_config_file = "./config/pm_b_3pu_mock.toml"       # Basic three phase unbalanced simulator
+
 
 #   Set the machine name
 calculation.machine_name.config.machine = "Machine_Name_Here"
+
 
 #   If using Basic hardware, set the ratio of the current transformer clamps (written on the clamp)
 #       For Intermediate and Advanced hardware this is the current in that produces 5A out 
