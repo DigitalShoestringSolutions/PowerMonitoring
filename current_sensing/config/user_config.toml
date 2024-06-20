@@ -1,5 +1,6 @@
 #   Select the config file (by removing the leading #) appropriate for your hardware and wiring setup
-# module_config_file = "./config/pm_b_1p.toml"             # Basic single phase
+# module_config_file = "./config/pm_b_1p_bc_robotics.toml"             # Basic single phase
+# module_config_file = "./config/pm_b_1p_grove.toml"             # Basic single phase
 # module_config_file = "./config/pm_b_3pb.toml"            # Basic three phase balanced (single clamp)
 # module_config_file = "./config/pm_b_3pu.toml"            # Basic three phase unbalanced (3 clamps)
 # module_config_file = "./config/pm_i_1p.toml"             # Intermediate single phase

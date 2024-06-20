@@ -32,6 +32,7 @@ class ADS1115:
 
     def __init__(self, config, variables):
         self.channel = config.get('adc_channel')
+        self.i2c_address = config.get('i2c_address','0x48')
         self.differential = config.get('differential', False)
 
         gain_string = config.get('gain', '4.096V')
@@ -59,7 +60,7 @@ class ADS1115:
             config = self.make_config_bytes()
             # trigger sample
             sample_time = time.monotonic_ns()
-            buffer_out = self.i2c.write_register(self.ADS111X_CONFIG_REGISTER, config)
+            buffer_out = self.i2c.write_register(self.i2c_address,self.ADS111X_CONFIG_REGISTER, config)
             # delay while sample taken
             time.sleep(self.sample_delay / 1000)
 
@@ -67,7 +68,7 @@ class ADS1115:
             while time.monotonic_ns() - sample_time < self.sample_delay * 1000 * 1000:
                 time.sleep((time.monotonic_ns() - sample_time) / (1000 * 1000 * 1000))
 
-            buffer_out = self.i2c.read_register(self.ADS111X_ADC_RESULT_REGISTER, 2)
+            buffer_out = self.i2c.read_register(self.i2c_address,self.ADS111X_ADC_RESULT_REGISTER, 2)
             # calculate voltage
             adc_reading = (buffer_out[0] << 8) + buffer_out[1]
             if adc_reading > 32767:

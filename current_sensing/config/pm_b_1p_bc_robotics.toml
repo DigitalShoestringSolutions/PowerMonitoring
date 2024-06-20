@@ -1,27 +1,20 @@
 #=-= Define Interface Modules =-=
-[interface.i2c0]
-    module="i2c"
-    class="I2C"
-[interface.i2c0.config]
-    bus=1
-    addr=0x48
+[interface.spi0]
+    module="spi"
+    class="SPI"
+[interface.spi0.config]
+    bus=0
+    device=0
+    speed=1000000
+    mode=0
 
 #=-= Define Device Modules =-=
-#[device.adc_0]
-#    module="adc_ADS111X"
-#    class="ADS1115"
-#    interface="i2c0"
-#[device.adc_0.config]
-#    adc_channel=1
-#[device.adc_0.variables]
-#    v_in = "v_amp_out"
-
 [device.adc_0]
-    module="adc_grove"
-    class="PiHat"
-    interface="i2c0"
+    module="adc_MCP300X"
+    class="MCP3008"
+    interface="spi0"
 [device.adc_0.config]
-    adc_channel=3
+    adc_channel=0
 [device.adc_0.variables]
     v_in = "v_amp_out"
 
