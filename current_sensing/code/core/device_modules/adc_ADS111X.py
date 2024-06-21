@@ -32,7 +32,7 @@ class ADS1115:
 
     def __init__(self, config, variables):
         self.channel = config.get('adc_channel')
-        self.i2c_address = config.get('i2c_address','0x48')
+        self.i2c_address = config.get('i2c_address',0x48)
         self.differential = config.get('differential', False)
 
         gain_string = config.get('gain', '4.096V')
