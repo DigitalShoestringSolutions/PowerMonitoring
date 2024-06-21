@@ -53,7 +53,7 @@
 
 #=-= Define Calculation Pipelines =-=
 [pipelines]
-    single_clamp = ["power","rms_current","current_clamp","amplifier","machine_name"]
+    single_clamp = ["rms_current","current_clamp","amplifier","machine_name"]
 
 #=-= Define Measurements Pipelines =-=
 [measurement]
