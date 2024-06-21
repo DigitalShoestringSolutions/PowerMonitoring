@@ -9,7 +9,7 @@ class PiHat:
 
     def __init__(self, config, variables):
         self.channel = config.get('adc_channel')
-        self.i2c_address = config.get('i2c_address',0x04)
+        self.i2c_address = config.get('i2c_address',0x08)
         self.ADCVoltage = config.get('v_ref', 3.3)
         self.i2c = None
 
