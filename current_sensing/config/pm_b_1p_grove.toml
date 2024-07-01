@@ -1,39 +1,19 @@
 #=-= Define Interface Modules =-=
-[interface.dummy]
-    module="testing"
-    class="Dummy"
-[interface.dummy.config]
+[interface.i2c0]
+    module="i2c"
+    class="I2C"
+[interface.i2c0.config]
+    bus=1
 
 #=-= Define Device Modules =-=
 [device.adc_0]
-    module="testing"
-    class="MockDeviceRandom"
-    interface="dummy"
+    module="adc_grove"
+    class="PiHat"
+    interface="i2c0"
 [device.adc_0.config]
-    min=1.8
-    max=2
+    adc_channel=0
 [device.adc_0.variables]
-    variable = "v_amp_out"
-
-[device.adc_1]
-    module="testing"
-    class="MockDeviceRandom"
-    interface="dummy"
-[device.adc_1.config]
-    min=1.6
-    max=1.8
-[device.adc_1.variables]
-    variable = "v_amp_out"
-
-[device.adc_2]
-    module="testing"
-    class="MockDeviceRandom"
-    interface="dummy"
-[device.adc_2.config]
-    min=1.6
-    max=1.9
-[device.adc_2.variables]
-    variable = "v_amp_out"
+    v_in = "v_amp_out"
 
 #=-= Define Calculation Modules =-=
 [calculation.machine_name]
@@ -54,7 +34,7 @@
     module="gen_current_clamp"
     class="VoltageClamp"
 [calculation.current_clamp.config]
-    nominal_current = 10
+    nominal_current = 20
 [calculation.current_clamp.variables]
     current_in = "clamp_current"
     voltage_out = "v_amp_in"
@@ -70,44 +50,29 @@
 
 #=-= Define Calculation Pipelines =-=
 [pipelines]
-    rms_current = ["rms_current","current_clamp","amplifier","machine_name"]
+    single_clamp = ["rms_current","current_clamp","amplifier","machine_name"]
 
 #=-= Define Measurements Pipelines =-=
 [measurement]
     module="gen_sample"
-    class="MultiSampleIndividualAvg"
+    class="SingleSampleAvg"
 [measurement.config]
     period = 1.0 # seconds
     n_samples = 5
 [[measurement.sensing_stacks]]
     device = "adc_0"
-    pipeline = "rms_current"
-    constants = {'phase'='A'}
-[[measurement.sensing_stacks]]
-    device = "adc_1"
-    pipeline = "rms_current"
-    constants = {'phase'='B'}
-[[measurement.sensing_stacks]]
-    device = "adc_2"
-    pipeline = "rms_current"
-    constants = {'phase'='C'}
+    pipeline = "single_clamp"
+    constants = {'phase'='single'}
 
-# [output.overall]
-#     path = "power_monitoring/{{machine}}/{{phase}}"
-# [output.overall.spec]
-#     timestamp = '$.timestamp'
-#     power = '$.power'
-#     current = "$.current_rms"
-#     phase = "$.phase"
-#     machine="#Machine_1"
-
-[output.phase]
+[output.overall]
     topic = "power_monitoring/{{machine}}/{{phase}}"
-[output.phase.message_spec]
-    machine = "$.machine"
+[output.overall.message_spec]
     timestamp = '$.timestamp'
+    power = '$.power'
     current = "$.current_rms"
     phase = "$.phase"
+    machine="$.machine"
+
 
 [mqtt]
     broker = "mqtt.docker.local"
