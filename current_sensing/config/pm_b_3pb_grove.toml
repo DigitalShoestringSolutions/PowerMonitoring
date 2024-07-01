@@ -1,39 +1,19 @@
 #=-= Define Interface Modules =-=
-[interface.dummy]
-    module="testing"
-    class="Dummy"
-[interface.dummy.config]
+[interface.i2c0]
+    module="i2c"
+    class="I2C"
+[interface.i2c0.config]
+    bus=1
 
 #=-= Define Device Modules =-=
 [device.adc_0]
-    module="testing"
-    class="MockDeviceRandom"
-    interface="dummy"
+    module="adc_grove"
+    class="PiHat"
+    interface="i2c0"
 [device.adc_0.config]
-    min=1.8
-    max=2
+    adc_channel=0
 [device.adc_0.variables]
-    variable = "v_amp_out"
-
-[device.adc_1]
-    module="testing"
-    class="MockDeviceRandom"
-    interface="dummy"
-[device.adc_1.config]
-    min=1.6
-    max=1.8
-[device.adc_1.variables]
-    variable = "v_amp_out"
-
-[device.adc_2]
-    module="testing"
-    class="MockDeviceRandom"
-    interface="dummy"
-[device.adc_2.config]
-    min=1.6
-    max=1.9
-[device.adc_2.variables]
-    variable = "v_amp_out"
+    v_in = "v_amp_out"
 
 #=-= Define Calculation Modules =-=
 [calculation.machine_name]
@@ -54,7 +34,7 @@
     module="gen_current_clamp"
     class="VoltageClamp"
 [calculation.current_clamp.config]
-    nominal_current = 10
+    nominal_current = 50
 [calculation.current_clamp.variables]
     current_in = "clamp_current"
     voltage_out = "v_amp_in"
@@ -82,15 +62,6 @@
 [[measurement.sensing_stacks]]
     device = "adc_0"
     pipeline = "rms_current"
-    constants = {'phase'='A'}
-[[measurement.sensing_stacks]]
-    device = "adc_1"
-    pipeline = "rms_current"
-    constants = {'phase'='B'}
-[[measurement.sensing_stacks]]
-    device = "adc_2"
-    pipeline = "rms_current"
-    constants = {'phase'='C'}
 
 # [output.overall]
 #     path = "power_monitoring/{{machine}}/{{phase}}"
@@ -101,17 +72,38 @@
 #     phase = "$.phase"
 #     machine="#Machine_1"
 
-[output.phase]
+[output.phase_a]
     topic = "power_monitoring/{{machine}}/{{phase}}"
-[output.phase.message_spec]
+[output.phase_a.message_spec]
     machine = "$.machine"
     timestamp = '$.timestamp'
     current = "$.current_rms"
-    phase = "$.phase"
+    phase = "#A"
+
+[output.phase_b]
+    topic = "power_monitoring/{{machine}}/{{phase}}"
+[output.phase_b.message_spec]
+    machine = "$.machine"
+    timestamp = '$.timestamp'
+    current = "$.current_rms"
+    phase = "#B"
+
+
+[output.phase_c]
+    topic = "power_monitoring/{{machine}}/{{phase}}"
+[output.phase_c.message_spec]
+    machine = "$.machine"
+    timestamp = '$.timestamp'
+    current = "$.current_rms"
+    phase = "#C"
+
 
 [mqtt]
+    # URL of the mqtt broker
     broker = "mqtt.docker.local"
+    # Port to use when connecting to the broker
     port = 1883   #common mqtt ports are 1883 and 8883
+    # prefix to prepend to the topic of all published messages
     topic_prefix = ""
 
     #reconnection characteristics

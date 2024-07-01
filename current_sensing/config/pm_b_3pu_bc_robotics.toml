@@ -1,39 +1,40 @@
 #=-= Define Interface Modules =-=
-[interface.dummy]
-    module="testing"
-    class="Dummy"
-[interface.dummy.config]
+[interface.spi0]
+    module="spi"
+    class="SPI"
+[interface.spi0.config]
+    bus=0
+    device=0
+    speed=1000000
+    mode=0
 
 #=-= Define Device Modules =-=
 [device.adc_0]
-    module="testing"
-    class="MockDeviceRandom"
-    interface="dummy"
+    module="adc_MCP300X"
+    class="MCP3008"
+    interface="spi0"
 [device.adc_0.config]
-    min=1.8
-    max=2
+    adc_channel=0
 [device.adc_0.variables]
-    variable = "v_amp_out"
+    v_in = "v_amp_out"
 
 [device.adc_1]
-    module="testing"
-    class="MockDeviceRandom"
-    interface="dummy"
+    module="adc_MCP300X"
+    class="MCP3008"
+    interface="spi0"
 [device.adc_1.config]
-    min=1.6
-    max=1.8
+    adc_channel=2
 [device.adc_1.variables]
-    variable = "v_amp_out"
+    v_in = "v_amp_out"
 
 [device.adc_2]
-    module="testing"
-    class="MockDeviceRandom"
-    interface="dummy"
+    module="adc_MCP300X"
+    class="MCP3008"
+    interface="spi0"
 [device.adc_2.config]
-    min=1.6
-    max=1.9
+    adc_channel=4
 [device.adc_2.variables]
-    variable = "v_amp_out"
+    v_in = "v_amp_out"
 
 #=-= Define Calculation Modules =-=
 [calculation.machine_name]
@@ -54,7 +55,7 @@
     module="gen_current_clamp"
     class="VoltageClamp"
 [calculation.current_clamp.config]
-    nominal_current = 10
+    nominal_current = 50
 [calculation.current_clamp.variables]
     current_in = "clamp_current"
     voltage_out = "v_amp_in"

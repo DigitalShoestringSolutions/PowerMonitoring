@@ -1,2 +1,16 @@
+# On Basic and Intermediate hardware, the voltage and power factor cannot be measured. 
+# However, constant values can be assumed for power calculations. Custom assumed constants for each machine can be set below.
+# If the machine name set in current_sensing/config/user_config.toml exactly matches an entry below, these will take effect.
+# Else, default values will be used. These can be seen in module_config.toml.
+
+# Set the assumed power factor for each machine.
 [config.power_factor.machines]
     Machine_1=0.95
+    Machine_2=0.85
+
+# Set the assumed voltage for each machine.
+# Enter the voltage between a live phase and neutral. In the UK this is typically 230V. 
+#     If you have measured the phase to phase voltage (eg 400V), divide that by the square root of 3 (approx 1.73)
+[config.voltage_line_neutral.machines]
+    Machine_1=230
+    Machine_2=232
