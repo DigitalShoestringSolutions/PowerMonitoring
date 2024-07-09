@@ -1,26 +1,22 @@
-logging {
-  level  = "debug"
-  format = "logfmt"
+
+discovery.docker "containers" {
+  host = "unix:///var/run/docker.sock"
 }
 
-loki.source.syslog "default" {
-  listener {
-    address  = "0.0.0.0:6514"
-  }
-
-  relabel_rules = loki.relabel.syslog_extract.rules
-
-  forward_to = [loki.process.label_log_level.receiver]
-}
-
-loki.relabel "syslog_extract" {
-  forward_to = []
+discovery.relabel "default" {
+  targets = discovery.docker.containers.targets
 
   rule {
-    action        = "labelmap"
-    regex         = "__syslog_message_app_name"
-    replacement   = "app_name"
+    action = "replace"
+    source_labels = ["__meta_docker_container_name"]
+    target_label = "container"
   }
+}
+
+loki.source.docker "default" {
+  host       = "unix:///var/run/docker.sock"
+  targets    = discovery.relabel.default.output
+  forward_to = [loki.process.label_log_level.receiver]
 }
 
 loki.process "label_log_level" {

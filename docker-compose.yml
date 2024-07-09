@@ -9,12 +9,6 @@ services:
             internal:
                 aliases:
                     - timeseries-db.docker.local
-        logging:
-            driver: syslog
-            options:
-                syslog-address: "tcp://localhost:6514"
-                syslog-format: "rfc5424"
-                tag: timeseries-db
         restart: unless-stopped
         depends_on:
             - "mqtt_broker"
@@ -27,11 +21,7 @@ services:
                 aliases:
                     - timeseries-input.docker.local
         logging:
-            driver: syslog
-            options:
-                syslog-address: "tcp://localhost:6514"
-                syslog-format: "rfc5424"
-                tag: timeseries-db-input
+            driver: local
         restart: unless-stopped
         depends_on:
             - "timeseries-db"
@@ -44,12 +34,6 @@ services:
             internal:
                 aliases:
                     - dashboards.docker.local
-        logging:
-            driver: syslog
-            options:
-                syslog-address: "tcp://localhost:6514"
-                syslog-format: "rfc5424"
-                tag: power-monitoring-dashboard
         restart: unless-stopped
         depends_on:
             - "mqtt_broker"
@@ -63,12 +47,6 @@ services:
             internal:
                 aliases:
                     - current-sensing.docker.local
-        logging:
-            driver: syslog
-            options:
-                syslog-address: "tcp://localhost:6514"
-                syslog-format: "rfc5424"
-                tag: current-sensing
         restart: unless-stopped
         depends_on:
             - "mqtt_broker"
@@ -81,12 +59,6 @@ services:
             internal:
                 aliases:
                     - graph.docker.local
-        logging:
-            driver: syslog
-            options:
-                syslog-address: "tcp://localhost:6514"
-                syslog-format: "rfc5424"
-                tag: power-monitoring-graph
         restart: unless-stopped
         depends_on: 
             - "timeseries-db"
@@ -99,12 +71,6 @@ services:
             internal:
                 aliases:
                     - analysis.docker.local
-        logging:
-            driver: syslog
-            options:
-                syslog-address: "tcp://localhost:6514"
-                syslog-format: "rfc5424"
-                tag: power-monitoring-analysis
         restart: unless-stopped       
         depends_on: 
             - "timeseries-db"
@@ -115,12 +81,6 @@ services:
             file: mqtt_broker/app.yml
             service: app
         restart: unless-stopped
-        logging:
-            driver: syslog
-            options:
-                syslog-address: "tcp://localhost:6514"
-                syslog-format: "rfc5424"
-                tag: mqtt-broker
         networks:
             internal:
                 aliases:
@@ -133,9 +93,9 @@ services:
         command: run --server.http.listen-addr=0.0.0.0:12345 /etc/alloy/config.alloy
         volumes:
         - ./logging/config.alloy:/etc/alloy/config.alloy:ro
+        - /var/run/docker.sock:/var/run/docker.sock
         ports:
         - 12345:12345
-        - "6514:6514"
         networks:
             internal:
                 aliases:
