@@ -1,0 +1,61 @@
+logging {
+  level  = "debug"
+  format = "logfmt"
+}
+
+loki.source.syslog "default" {
+  listener {
+    address  = "0.0.0.0:6514"
+  }
+
+  relabel_rules = loki.relabel.syslog_extract.rules
+
+  forward_to = [loki.process.label_log_level.receiver]
+}
+
+loki.relabel "syslog_extract" {
+  forward_to = []
+
+  rule {
+    action        = "labelmap"
+    regex         = "__syslog_message_app_name"
+    replacement   = "app_name"
+  }
+}
+
+loki.process "label_log_level" {
+    stage.regex {
+        expression  = "^.*?(?i:(?P<log_level>debug|info|warning|warn|error|critical)).*$"
+    }
+
+    stage.template {
+      source   = "log_level"
+      template = "{{ ToLower .Value }}"
+    }
+
+    stage.labels {
+        values = {
+            "level" = "log_level",
+        }
+    }
+
+    stage.match {
+      selector = "{log_level=\"\"}"
+
+      stage.static_labels  {
+        values = {
+          level = "not_set",
+        }
+      }
+    }
+
+    forward_to = [loki.write.local_loki.receiver]
+}
+
+
+
+loki.write "local_loki" {
+  endpoint {
+    url = "http://loki.docker.local:3100/loki/api/v1/push"
+  }
+}
