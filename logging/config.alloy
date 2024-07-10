@@ -1,4 +1,9 @@
 
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
 discovery.docker "containers" {
   host = "unix:///var/run/docker.sock"
 }
@@ -7,9 +12,26 @@ discovery.relabel "default" {
   targets = discovery.docker.containers.targets
 
   rule {
+    action = "labelmap"
+    regex = "__meta_docker_container_label_net_digital(shoestring_[^_]+)"
+  }
+
+  rule {
     action = "replace"
     source_labels = ["__meta_docker_container_name"]
     target_label = "container"
+  } 
+
+  rule {
+    action = "replace"
+    source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
+    target_label = "service_module"
+  }
+
+   rule {
+    action = "drop"
+    regex = "^false$"
+    source_labels = ["shoestring_log"]
   }
 }
 
@@ -20,32 +42,29 @@ loki.source.docker "default" {
 }
 
 loki.process "label_log_level" {
-    stage.regex {
-        expression  = "^.*?(?i:(?P<log_level>debug|info|warning|warn|error|critical)).*$"
+
+  stage.regex {
+    expression  = "^.*?(?i:(?P<log_level>debug|info|warning|warn|error|critical)).*$"
+  }
+
+  stage.template {
+    source   = "log_level"
+    template = "{{ ToLower .Value }}"
+  }
+
+  stage.static_labels  {
+    values = {
+      level = "not_set",
     }
+  }
 
-    stage.template {
-      source   = "log_level"
-      template = "{{ ToLower .Value }}"
-    }
-
-    stage.labels {
-        values = {
-            "level" = "log_level",
-        }
-    }
-
-    stage.match {
-      selector = "{log_level=\"\"}"
-
-      stage.static_labels  {
-        values = {
-          level = "not_set",
-        }
+  stage.labels {
+      values = {
+          "level" = "log_level",
       }
-    }
+  }
 
-    forward_to = [loki.write.local_loki.receiver]
+  forward_to = [loki.write.local_loki.receiver]
 }
 
 

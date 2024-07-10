@@ -12,6 +12,10 @@ services:
         restart: unless-stopped
         depends_on:
             - "mqtt_broker"
+        labels:
+            net.digitalshoestring.solution: "power-monitoring"
+            net.digitalshoestring.function: "application"
+
     timeseries-db-input:
         extends:
             file: timeseries_datastorage/app.yml
@@ -20,12 +24,13 @@ services:
             internal:
                 aliases:
                     - timeseries-input.docker.local
-        logging:
-            driver: local
         restart: unless-stopped
         depends_on:
             - "timeseries-db"
             - "mqtt_broker"
+        labels:
+            net.digitalshoestring.solution: "power-monitoring"
+            net.digitalshoestring.function: "application"
     dashboard:
         extends:
             file: dashboards/app.yml
@@ -37,6 +42,9 @@ services:
         restart: unless-stopped
         depends_on:
             - "mqtt_broker"
+        labels:
+            net.digitalshoestring.solution: "power-monitoring"
+            net.digitalshoestring.function: "application"
  
    
     current-sensing:
@@ -50,6 +58,9 @@ services:
         restart: unless-stopped
         depends_on:
             - "mqtt_broker"
+        labels:
+            net.digitalshoestring.solution: "power-monitoring"
+            net.digitalshoestring.function: "application"
  
     graph:
         extends: 
@@ -62,6 +73,9 @@ services:
         restart: unless-stopped
         depends_on: 
             - "timeseries-db"
+        labels:
+            net.digitalshoestring.solution: "power-monitoring"
+            net.digitalshoestring.function: "application"
 
     analysis:
         extends:
@@ -74,6 +88,9 @@ services:
         restart: unless-stopped       
         depends_on: 
             - "timeseries-db"
+        labels:
+            net.digitalshoestring.solution: "power-monitoring"
+            net.digitalshoestring.function: "application"
 
  
     mqtt_broker:
@@ -87,6 +104,9 @@ services:
                     - mqtt.docker.local
         depends_on: 
             - "alloy"
+        labels:
+            net.digitalshoestring.solution: "power-monitoring"
+            net.digitalshoestring.function: "infrastructure"
 
     alloy:
         image: grafana/alloy:v1.2.0
@@ -100,6 +120,10 @@ services:
             internal:
                 aliases:
                     - alloy.docker.local
+        labels:
+            net.digitalshoestring.solution: "power-monitoring"
+            net.digitalshoestring.function: "infrastructure"
+            net.digitalshoestring.log: "true"
 
     loki:
         image: grafana/loki:3.1.0
@@ -114,6 +138,10 @@ services:
             internal:
                 aliases:
                     - loki.docker.local
+        labels:
+            net.digitalshoestring.solution: "power-monitoring"
+            net.digitalshoestring.function: "infrastructure"
+            net.digitalshoestring.log: "true"
 
 networks:
      internal:

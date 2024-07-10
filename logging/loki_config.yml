@@ -2,6 +2,8 @@ auth_enabled: false
 
 server:
   http_listen_port: 3100
+  grpc_server_max_recv_msg_size: 268435456 #256 MB
+  grpc_server_max_send_msg_size: 268435456 #256 MB
 
 
 schema_config:
@@ -49,11 +51,12 @@ compactor:
 
 # documentation: https://grafana.com/docs/loki/latest/operations/storage/retention/
 limits_config:
+  max_entries_limit_per_query: 100000 # increase query entry limits
   retention_period: 168h # 7 days for all logs
   retention_stream:
   - selector: '{level="debug"}' # 1 day for logs with debug level
     priority: 1
-    period: 24h
+    period: 24h # must be >=24h
 
 analytics:
   reporting_enabled: false
