@@ -111,11 +111,10 @@ services:
     alloy:
         image: grafana/alloy:v1.2.0
         command: run --server.http.listen-addr=0.0.0.0:12345 /etc/alloy/config.alloy
+        restart: unless-stopped
         volumes:
         - ./logging/config.alloy:/etc/alloy/config.alloy:ro
         - /var/run/docker.sock:/var/run/docker.sock
-        ports:
-        - 12345:12345
         networks:
             internal:
                 aliases:
@@ -123,10 +122,11 @@ services:
         labels:
             net.digitalshoestring.solution: "power-monitoring"
             net.digitalshoestring.function: "infrastructure"
-            net.digitalshoestring.log: "true"
+            # net.digitalshoestring.log: "false"
 
     loki:
         image: grafana/loki:3.1.0
+        restart: unless-stopped
         user: $CURRENT_UID
         ports:
         - "3100:3100"
@@ -141,7 +141,20 @@ services:
         labels:
             net.digitalshoestring.solution: "power-monitoring"
             net.digitalshoestring.function: "infrastructure"
-            net.digitalshoestring.log: "true"
+            # net.digitalshoestring.log: "false"
+    
+    stats-collector:
+        extends:
+            file: stats_collector/app.yml
+            service: app
+        networks:
+            internal:
+                aliases:
+                    - stats.docker.local
+        restart: unless-stopped
+        labels:
+            net.digitalshoestring.solution: "power-monitoring"
+            net.digitalshoestring.function: "infrastructure"
 
 networks:
      internal:

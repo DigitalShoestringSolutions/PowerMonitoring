@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+    app:
+        build: .
+        # command: sh -c "/app/set_host.sh && exec python3 ./main.py"
+        command: python3 ./main.py
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - ./code:/app
+            - ./config:/app/config
+            - ./data:/app/data
+        ports:
+            - 80:80
