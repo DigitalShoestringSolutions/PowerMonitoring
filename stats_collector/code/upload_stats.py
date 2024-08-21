@@ -73,8 +73,10 @@ async def task(app):
                 args=[id_token],
                 trigger="interval",
                 hours=3,
-                jitter=60,  #seconds
+                jitter=60,  # seconds
                 id="heartbeat",
+                coalesce=True,
+                misfire_grace_time=10800,  # 3h in seconds
             )
 
             scheduler.add_job(
@@ -82,8 +84,10 @@ async def task(app):
                 args=[id_token],
                 trigger="interval",
                 hours=24,
-                jitter=60, #seconds
+                jitter=60,  # seconds
                 id="report_usage",
+                coalesce=True,
+                misfire_grace_time = 84600 # 24h in seconds
             )
 
             scheduler.start()
@@ -252,10 +256,14 @@ async def submit_running_report(id_token, report):
             f"Ran out of retries while trying to send running report - will try again at next time interval."
         )
 
+last_run = None
 
 async def submit_usage_report(id_token):
+    global last_run
     now_floor_1h = datetime.datetime.now(tz=datetime.timezone.utc).replace(minute=0,second=0,microsecond=0)
     now_floor_1h_minus_24h = now_floor_1h - datetime.timedelta(days=1)
+
+    timespan_from = last_run if last_run is not None else now_floor_1h_minus_24h
 
     async with aiohttp.ClientSession(
         timeout=aiohttp.ClientTimeout(total=10)
@@ -268,12 +276,13 @@ async def submit_usage_report(id_token):
             async with session.get(
                 "http://localhost/api/all",
                 params={
-                    "from": now_floor_1h_minus_24h.isoformat(),
+                    "from": timespan_from.isoformat(),
                     "to": now_floor_1h.isoformat(),
                 },
             ) as resp:
                 report = await resp.json()
                 logger.debug(f"Usage: {report}")
+                last_run = now_floor_1h
 
         except aiohttp.ClientConnectionError:
             logger.error("Unable to connect to internal target")
@@ -325,4 +334,3 @@ async def on_exit(id_token):
     logger.debug("Handling Exit")
     await submit_stopped_report(id_token)
     logger.info("Sent stop report")
-
