@@ -5,12 +5,12 @@
 
 # Set the assumed power factor for each machine.
 [config.power_factor.machines]
-    Machine_1=0.95
+    Machine_1=1
     Machine_2=0.85
 
 # Set the assumed voltage for each machine.
 # Enter the voltage between a live phase and neutral. In the UK this is typically 230V. 
 #     If you have measured the phase to phase voltage (eg 400V), divide that by the square root of 3 (approx 1.73)
 [config.voltage_line_neutral.machines]
-    Machine_1=230
+    Machine_1=12
     Machine_2=232

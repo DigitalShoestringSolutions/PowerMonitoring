@@ -42,7 +42,7 @@ async def __get_real_power(args):
         ]
     '''
     default_voltage = args["global_config"]["voltage_line_neutral"].get(
-        "default", 230)
+        "default", 12)
     machine_voltages = args["global_config"]["voltage_line_neutral"].get(
         "machines", {})
     
@@ -87,7 +87,7 @@ async def apparent_power(args):
         ]
     '''
     default_voltage = args["global_config"]["voltage_line_neutral"].get(
-        "default", 230)
+        "default", 12)
     machine_voltages = args["global_config"]["voltage_line_neutral"].get(
         "machines", {})
     tables = await __query_current_and_power(args, "power_apparent")
@@ -232,7 +232,7 @@ async def energy_bucket(args):
 
 async def __get_energy(args):
     default_voltage = args["global_config"]["voltage_line_neutral"].get(
-        "default", 230)
+        "default", 12)
     machine_voltages = args["global_config"]["voltage_line_neutral"].get(
         "machines", {})
     default_power_factor = args["global_config"]["power_factor"].get(
@@ -280,7 +280,7 @@ async def energy_total(args):
         There should be one value in the returned list for each machine
     '''
     default_voltage = args["global_config"]["voltage_line_neutral"].get(
-        "default", 230)
+        "default", 12)
     machine_voltages = args["global_config"]["voltage_line_neutral"].get(
         "machines", {})
     default_power_factor = args["global_config"]["power_factor"].get(

@@ -1,5 +1,5 @@
 [config.voltage_line_neutral]
-	default = 230
+	default = 12
 [config.influx]
 	url = "http://timeseries-db.docker.local:8086"
 	token = "<Should be overwritten by environment variable>"
