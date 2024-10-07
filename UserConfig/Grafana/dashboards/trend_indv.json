@@ -330,7 +330,7 @@
         "hide": 2,
         "label": "Influx Bucket",
         "name": "const_bucket",
-        "query": "power_monitoring",
+        "query": "shoestring_data_bucket",
         "skipUrlSync": false,
         "type": "constant"
       },
