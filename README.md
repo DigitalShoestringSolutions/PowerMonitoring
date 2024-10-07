@@ -9,10 +9,10 @@ This has flexibility including n-phases, each with different ADCs and CTs.
 
 ## Configure & Assemble
 - Edit the file at `/UserConfig/Sensing/main.py` to set the machine name and configure phases and sensors
-- Edit the file at `/analysis/config/user_config.toml` to set the voltage and power factor for calculations
+- Edit the file at `/UserConfig/Analysis/user_config.toml` to set the voltage and power factor for calculations
 - Check the recipe contains the Service Modules you desire `nano recipe.txt`
 - Assemble the reusuable Service Modules `ServiceModules/Asssembly/get_service_modules.sh`
-  - the bespoke `graph` and `analysis` Service Modules are included with this Solution 
+  - the bespoke `Graph` and `Analysis` Service Modules are included with this Solution 
 - Restart to apply the settings to the downloaded Service Modules
 
 ## Build
