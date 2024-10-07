@@ -1,0 +1,3 @@
+paho-mqtt==1.6.1    # For MQTT publications
+smbus2==0.4.3       # For ADS1115
+spidev==3.6         # For MCP3008, BCR ADC HAT

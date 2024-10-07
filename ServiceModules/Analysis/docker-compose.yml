@@ -1,0 +1,26 @@
+services:
+    analysis:
+        build: .
+
+        command: ["python","main.py","--log","info"]
+    
+        environment:
+            - CONFIG__INFLUX__TOKEN=${DB_ADMIN_INITIAL_TOKEN}
+
+        ports:
+            - '8000:80'
+
+        volumes:
+            - ./config:/app/config:ro
+
+        networks:
+            internal:
+                aliases:
+                    - analysis.docker.local
+
+        logging:
+            driver: syslog
+            options:
+                tag: docker-analysis
+
+        restart: unless-stopped     
