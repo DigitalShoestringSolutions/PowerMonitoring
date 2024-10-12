@@ -7,6 +7,7 @@
 #module_config_file = "./config/pm_b_3pb_grove.toml"        # Three phase balanced (single clamp) with Grove ADC
 #module_config_file = "./config/pm_b_3pu_bc_robotics.toml"  # Three phase unbalanced (Three clamps) with BC Robotics ADC
 #module_config_file = "./config/pm_b_3pu_grove.toml"        # Three phase unbalanced (Three clamps) with Grove ADC
+#module_config_file = "./config/pm_dc_gravity_ads1115.toml" # Gravity DC current sensor connected to ADS1115 ADC
 #
 #   Intermediate:
 #module_config_file = "./config/pm_i_1p.toml"               # Single phase
