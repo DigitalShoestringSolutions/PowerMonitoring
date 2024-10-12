@@ -25,13 +25,13 @@ module_config_file = "./config/pm_b_3pu_mock.toml"          # Basic three phase 
 calculation.machine_name.config.machine = "Machine_Name_Here"
 
 
-#   If using Basic hardware, set the ratio of the current transformer clamps (written on the clamp).
+#   If using Basic AC hardware, set the ratio of the current transformer clamps (written on the clamp).
 #   For Intermediate and Advanced hardware this is the current in that produces 5A out
 #   and needs to be set on the multifunction Meter - leave commented out here.
 #calculation.current_clamp.config.nominal_current = 50      # Amps for 1V output
 
 
-#   If using Basic hardware, set which adc you are using and which channels the clamps are plugged into.
+#   If using Basic hardware, set which ADC you are using and which channels the clamp(s) are plugged into.
 #   If using Intermediate or Advanced hardware, leave all these commented out.
 #device.adc_0.config.adc_channel = 0
 #device.adc_1.config.adc_channel = 2                        # If using multiple clamps
