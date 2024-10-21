@@ -28,10 +28,10 @@
 
 [calculation.calibrate]
     module="gen_calibrate"
-    class="MultiplierOffset"
-[calculation.calibrate.config]  # These values are a blind guess.
-    offset = -15.86             # = (3.3V/2)*multiplier
-    multiplier = 9.61           # Kept the same as empirically found with ADS1115
+    class="OffsetMultiplier"
+[calculation.calibrate.config]
+    offset = -1.61              # Slightly less offset required in empirical tuning. Nominal midsupply 3V3/2
+    multiplier = 15.62
 [calculation.calibrate.variables]
     raw_value = "v_amp_out"
     calibrated_value = "current"

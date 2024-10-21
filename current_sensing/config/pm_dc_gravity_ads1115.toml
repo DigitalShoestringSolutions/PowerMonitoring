@@ -26,10 +26,10 @@
 
 [calculation.calibrate]
     module="gen_calibrate"
-    class="MultiplierOffset"
+    class="OffsetMultiplier"
 [calculation.calibrate.config]
-    offset = -25.09             # Empirically tuned at 5V supply & 0-7A. Guess nominal=multiplier*midsupply
-    multiplier = 9.61           # Guess nominal 10
+    offset = -1.642             # Emperically tuned. Nominal midsupply 3V3/2.
+    multiplier = 15.62          # Emperically tuned 0-7A.
 [calculation.calibrate.variables]
     raw_value = "v_amp_out"
     calibrated_value = "current"
