@@ -56,7 +56,6 @@
     topic = "power_monitoring/{{machine}}/{{phase}}"
 [output.overall.message_spec]
     timestamp = '$.timestamp'
-    power = '$.power'
     current = "$.current"
     phase = "$.phase"
     machine="$.machine"
