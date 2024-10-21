@@ -33,7 +33,7 @@ calculation.machine_name.config.machine = "Machine_Name_Here"
 #calculation.current_clamp.config.nominal_current = 50          # Amps for 1V output
 
 
-#   If using Basic hardware, set which ADC you are using and which channels the clamp(s) are plugged into.
+#   If using Basic hardware, set which ADC channels the clamp(s) are plugged into.
 #   If using Intermediate or Advanced hardware, leave all these commented out.
 #device.adc_0.config.adc_channel = 0
 #device.adc_1.config.adc_channel = 2                            # If using multiple clamps
