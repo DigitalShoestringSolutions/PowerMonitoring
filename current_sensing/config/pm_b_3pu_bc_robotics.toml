@@ -93,14 +93,6 @@
     pipeline = "rms_current"
     constants = {'phase'='C'}
 
-# [output.overall]
-#     path = "power_monitoring/{{machine}}/{{phase}}"
-# [output.overall.spec]
-#     timestamp = '$.timestamp'
-#     power = '$.power'
-#     current = "$.current_rms"
-#     phase = "$.phase"
-#     machine="#Machine_1"
 
 [output.phase]
     topic = "power_monitoring/{{machine}}/{{phase}}"
