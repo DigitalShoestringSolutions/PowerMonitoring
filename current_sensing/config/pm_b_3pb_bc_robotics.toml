@@ -66,14 +66,6 @@
     device = "adc_0"
     pipeline = "rms_current"
 
-# [output.overall]
-#     path = "power_monitoring/{{machine}}/{{phase}}"
-# [output.overall.spec]
-#     timestamp = '$.timestamp'
-#     power = '$.power'
-#     current = "$.current_rms"
-#     phase = "$.phase"
-#     machine="#Machine_1"
 
 [output.phase_a]
     topic = "power_monitoring/{{machine}}/{{phase}}"
@@ -90,7 +82,6 @@
     timestamp = '$.timestamp'
     current = "$.current_rms"
     phase = "#B"
-
 
 [output.phase_c]
     topic = "power_monitoring/{{machine}}/{{phase}}"
