@@ -12,6 +12,7 @@
     interface="i2c0"
 [device.adc_0.config]
     adc_channel=0
+    i2c_address = 0x08
 [device.adc_0.variables]
     v_in = "v_amp_out"
 
