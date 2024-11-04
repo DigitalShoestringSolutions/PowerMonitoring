@@ -34,7 +34,7 @@ class PowerToCurrent:
         self.phases = config.get('phases',1)
 
         if self.phase_voltage is None:
-            if self.phase_voltage:
+            if self.line_voltage:
                 self.phase_voltage = self.line_voltage * self.one_over_sqrt_3
             else:
                 self.phase_voltage = 230
