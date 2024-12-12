@@ -48,7 +48,7 @@ class ADS1115:
             self.speed, self.sample_delay = self.ADS111X_SAMPLE_SPEEDS.get('128SPS')
 
         self.i2c = None
-
+        self.channel_mask = 0b11
         self.input_variable = variables['v_in']
 
     def initialise(self, interface):
@@ -84,7 +84,15 @@ class ADS1115:
         msb |= 1 << 7  # start single shot conversion
         if not self.differential:
             msb |= 0b1 << 6
-        msb |= (self.channel & 0b11) << 4
+            
+        # Check channel number is valid. How should errors be logged / raised in this context? I expect the except Exception at the end of sample() to log these.
+        if not isinstance(self.channel, int):
+            raise TypeError("ADS1115 supplied with channel " + str(self.channel) + " which is a " + str(type(self.channel) + " not an int")
+            
+        elif (self.channel < 0) or (self.channel > self.channel_mask):
+            raise ValueError("ADS1115 supplied with channel number " + str(self.channel) + " cannot be negative or greater than mask " + str(self.channel_mask))
+        
+        msb |= (self.channel & self.channel_mask) << 4
         msb |= self.gain << 1
         msb |= 0b1  # single shot mode
 
