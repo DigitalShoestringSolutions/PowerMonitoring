@@ -12,6 +12,7 @@ class PiHat:
         self.i2c_address = config.get('i2c_address',0x08)
         self.ADCVoltage = config.get('v_ref', 3.3)
         self.i2c = None
+        self.channel_mask = 0x0F                            # maximum valid channel number
 
         self.input_variable = variables['v_in']
 
@@ -29,14 +30,25 @@ class PiHat:
 
     def sample(self):
         try:
+            # Check channel number is valid. How should errors be logged / raised in this context? I expect the except Exception below to log these.
+            if not isinstance(self.channel, int):
+                raise TypeError("PiHat supplied with channel " + str(self.channel) + " which is a " + str(type(self.channel) + " not an int")
+                
+            elif (self.channel < 0) or (self.channel > self.channel_mask):
+                raise ValueError("PiHat supplied with channel number " + str(self.channel) + " cannot be negative or greater than mask " + str(self.channel_mask))
+
             # prepare register byte
-            register_addr = 0x10 | (self.channel & 0x0F)
+            register_addr = 0x10 | (self.channel & self.channel_mask)
+
             # perform reading
             readings = self.i2c.read_register(self.i2c_address,register_addr, 2,stop=True)
+
             # calculate voltage
             adc_reading = (readings[1] << 8) + readings[0]
             voltage = (adc_reading / self.ADCMax) * self.ADCVoltage
+
             return {self.input_variable: voltage}
+
         except Exception as e:
             logger.error(traceback.format_exc())
             raise e
