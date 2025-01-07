@@ -3,7 +3,7 @@ Docker=v1.0
 SetupLogging=v1.1
 
 # Data collection
-Sensing=lite-v0.4
+Sensing=lite-v0.5
 
 # Data transfer
 MQTTBroker=v1.0

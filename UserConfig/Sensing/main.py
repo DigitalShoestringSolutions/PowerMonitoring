@@ -5,7 +5,7 @@
 from time import sleep
 # installed imports
 #none
-# local imports from Sensing Service Module version lite-v0.4
+# local imports from Sensing Service Module version lite-v0.5
 from utilities.mqtt_out import publish
 from hardware.ICs.BCRoboticsADCHAT import BCRoboticsADCHAT
 from hardware.ICs.ads1115 import ADS1115
