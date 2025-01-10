@@ -84,14 +84,14 @@ class ADS1115:
         msb |= 1 << 7  # start single shot conversion
         if not self.differential:
             msb |= 0b1 << 6
-            
+
         # Check channel number is valid. How should errors be logged / raised in this context? I expect the except Exception at the end of sample() to log these.
         if not isinstance(self.channel, int):
-            raise TypeError("ADS1115 supplied with channel " + str(self.channel) + " which is a " + str(type(self.channel) + " not an int")
-            
+            raise TypeError("ADS1115 supplied with channel " + str(self.channel) + " which is a " + str(type(self.channel)) + " not an int")
+
         elif (self.channel < 0) or (self.channel > self.channel_mask):
             raise ValueError("ADS1115 supplied with channel number " + str(self.channel) + " cannot be negative or greater than mask " + str(self.channel_mask))
-        
+
         msb |= (self.channel & self.channel_mask) << 4
         msb |= self.gain << 1
         msb |= 0b1  # single shot mode

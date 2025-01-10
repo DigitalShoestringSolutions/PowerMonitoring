@@ -32,7 +32,7 @@ class PiHat:
         try:
             # Check channel number is valid. How should errors be logged / raised in this context? I expect the except Exception below to log these.
             if not isinstance(self.channel, int):
-                raise TypeError("PiHat supplied with channel " + str(self.channel) + " which is a " + str(type(self.channel) + " not an int")
+                raise TypeError("PiHat supplied with channel " + str(self.channel) + " which is a " + str(type(self.channel)) + " not an int")
                 
             elif (self.channel < 0) or (self.channel > self.channel_mask):
                 raise ValueError("PiHat supplied with channel number " + str(self.channel) + " cannot be negative or greater than mask " + str(self.channel_mask))
