@@ -24,19 +24,34 @@
     machine = "Machine_1"
 [calculation.machine_name.variables]
 
-[calculation.calibrate]
-    module="gen_calibrate"
-    class="OffsetMultiplier"
-[calculation.calibrate.config]
-    offset = -1.642             # Emperically tuned. Nominal midsupply 3V3/2.
-    multiplier = 15.62          # Emperically tuned 0-7A.
-[calculation.calibrate.variables]
-    raw_value = "v_amp_out"
-    calibrated_value = "current"
+[calculation.rms_current]
+    module="gen_electrical"
+    class="RMSToPeak"
+[calculation.rms_current.variables]
+    var_in = "current_rms"
+    var_out = "clamp_current"
+
+[calculation.current_clamp]
+    module="gen_current_clamp"
+    class="VoltageClamp"
+[calculation.current_clamp.config]
+    nominal_current = 20
+[calculation.current_clamp.variables]
+    current_in = "clamp_current"
+    voltage_out = "v_amp_in"
+
+[calculation.amplifier]
+    module="gen_amplifier"
+    class="GenAmplifier"
+[calculation.amplifier.config]
+    gain = 2
+[calculation.amplifier.variables]
+    amp_input = "v_amp_in"
+    amp_output = "v_amp_out"
 
 #=-= Define Calculation Pipelines =-=
 [pipelines]
-    single_clamp = ["calibrate","machine_name"]
+    single_clamp = ["rms_current","current_clamp","amplifier","machine_name"]
 
 #=-= Define Measurements Pipelines =-=
 [measurement]
@@ -54,7 +69,7 @@
     topic = "power_monitoring/{{machine}}/{{phase}}"
 [output.overall.message_spec]
     timestamp = '$.timestamp'
-    current = "$.current"
+    current = "$.current_rms"
     phase = "$.phase"
     machine="$.machine"
 
