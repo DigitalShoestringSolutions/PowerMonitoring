@@ -85,7 +85,7 @@ class ADS1115:
         if not self.differential:
             msb |= 0b1 << 6
 
-        # Check channel number is valid. How should errors be logged / raised in this context? I expect the except Exception at the end of sample() to log these.
+        # Check channel number is valid. Must be an int between 0 and self.channel_mask inclusive.
         if not isinstance(self.channel, int):
             raise TypeError("ADS1115 supplied with channel " + str(self.channel) + " which is a " + str(type(self.channel)) + " not an int")
 

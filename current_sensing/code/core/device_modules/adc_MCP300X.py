@@ -22,7 +22,7 @@ class MCP3008:
 
     def sample(self):
         try:
-            # Check channel number is valid. How should errors be logged / raised in this context? I expect the except Exception below to log these.
+            # Check channel number is valid. Must be an int between 0 and self.channel_mask inclusive.
             if not isinstance(self.channel, int):
                 raise TypeError("MCP300X supplied with channel " + str(self.channel) + " which is a " + str(type(self.channel)) + " not an int")
 
