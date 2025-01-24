@@ -1,7 +1,7 @@
 # Power Monitoring Starter Solution
 
 This branch demonstrates a minimal implementation of Power Monitoring (in a Basic configuration only) assembled from a recipe of service modules.  
-This has flexibility including n-phases, each with different ADCs and CTs.
+This has flexibility including n-machines, each with any number of phases, each with different ADCs and CTs.
 
 ## Download
 - Clone this repo: `git clone https://github.com/DigitalShoestringSolutions/PowerMonitoring -b feature/recipe`
