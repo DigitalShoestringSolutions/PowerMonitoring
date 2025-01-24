@@ -1,12 +1,8 @@
-[config.voltage_line_neutral]
-	default = 230
 [config.influx]
 	url = "http://timeseries-db.docker.local:8086"
 	token = "<Should be overwritten by environment variable>"
 	org = "SHOESTRING"
-[config.power_factor]
-	default = 1.0
-	
+
 
 [routes.real_power]
 	path="/power/real"
