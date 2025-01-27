@@ -10,10 +10,12 @@
 #module_config_file = "./config/pm_b_3pb_bc_robotics.toml"      # Three phase balanced (single clamp) with BC Robotics ADC
 #module_config_file = "./config/pm_b_3pb_grove_v1.0.toml"       # Three phase balanced (single clamp) with Grove ADC v1.0
 #module_config_file = "./config/pm_b_3pb_grove_v1.1.toml"       # Three phase balanced (single clamp) with Grove ADC v1.1
+#module_config_file = "./config/pm_b_3pb_sequent.toml"          # Three phase balanced (single clamp) with Sequent 16 channel Universal Inputs ADC
 #module_config_file = "./config/pm_b_3pu_ads1115.toml"          # Three phase unbalanced (Three clamps) with ADS1115 ADC
 #module_config_file = "./config/pm_b_3pu_bc_robotics.toml"      # Three phase unbalanced (Three clamps) with BC Robotics ADC
 #module_config_file = "./config/pm_b_3pu_grove_v1.0.toml"       # Three phase unbalanced (Three clamps) with Grove ADC v1.0
 #module_config_file = "./config/pm_b_3pu_grove_v1.1.toml"       # Three phase unbalanced (Three clamps) with Grove ADC v1.1
+#module_config_file = "./config/pm_b_3pu_sequent.toml"          # Three phase unbalanced (Three clamps) with Sequent 16 channel Universal Inputs ADC
 #module_config_file = "./config/pm_dc_gravity_ads1115.toml"     # Gravity DC current sensor connected to ADS1115 ADC
 #module_config_file = "./config/pm_dc_gravity_bc_robotics.toml" # Gravity DC current sensor connected to BC Robotics ADC
 #module_config_file = "./config/pm_dc_gravity_grove_v1.0.toml"  # Gravity DC current sensor connected to Grove ADC v1.0
