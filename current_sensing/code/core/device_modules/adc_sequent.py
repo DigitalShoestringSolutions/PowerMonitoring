@@ -25,7 +25,7 @@ class Sequent16chADC:
             if not isinstance(self.channel, int):
                 raise TypeError("Sequent16chADC supplied with channel " + str(self.channel) + " which is a " + str(type(self.channel)) + " not an int")
                 
-            elif (self.channel < 1) or (self.channel > self.channel_mask):  # As marked on silkscreen, this ADC' lowest channel is 1.
+            elif (self.channel < 1) or (self.channel > self.channel_mask):  # As marked on silkscreen, this ADC's lowest channel is 1.
                 raise ValueError("Sequent16chADC supplied with channel number " + str(self.channel) + " cannot be negative or greater than mask " + str(self.channel_mask))
 
             # prepare register byte
