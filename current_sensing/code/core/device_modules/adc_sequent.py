@@ -24,14 +24,14 @@ class Sequent16chADC:
             # Check channel number is valid. Must be an int between 1 and self.channel_mask inclusive.
             if not isinstance(self.channel, int):
                 raise TypeError("Sequent16chADC supplied with channel " + str(self.channel) + " which is a " + str(type(self.channel)) + " not an int")
-                
+
             elif (self.channel < 1) or (self.channel > self.channel_mask):  # As marked on silkscreen, this ADC's lowest channel is 1.
                 raise ValueError("Sequent16chADC supplied with channel number " + str(self.channel) + " cannot be negative or greater than mask " + str(self.channel_mask))
 
             # prepare register byte
             register_addr = 6 + ((self.channel - 1) * 2)
 
-            # perform reading
+            # perform reading. If stop=True, readings can glitch when monitoring multiple machines simultaneously. 
             readings = self.i2c.read_register(self.i2c_address, register_addr, 2, stop=False)
 
             # calculate voltage
