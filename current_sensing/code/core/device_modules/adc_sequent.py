@@ -32,7 +32,7 @@ class Sequent16chADC:
             register_addr = 6 + ((self.channel - 1) * 2)
 
             # perform reading
-            readings = self.i2c.read_register(self.i2c_address, register_addr, 2, stop=True)
+            readings = self.i2c.read_register(self.i2c_address, register_addr, 2, stop=False)
 
             # calculate voltage
             adc_reading = (readings[1] << 8) + readings[0]
