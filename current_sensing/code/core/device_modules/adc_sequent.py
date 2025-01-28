@@ -31,7 +31,7 @@ class Sequent16chADC:
             # prepare register byte
             register_addr = 6 + ((self.channel - 1) * 2)
 
-            # perform reading. If stop=True, readings can glitch when monitoring multiple machines simultaneously. 
+            # perform reading. If stop=True, readings can glitch when monitoring multiple machines simultaneously.
             readings = self.i2c.read_register(self.i2c_address, register_addr, 2, stop=False)
 
             # calculate voltage
