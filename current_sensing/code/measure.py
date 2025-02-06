@@ -70,16 +70,16 @@ class BuildingBlockFramework(multiprocessing.Process):
 
         logger.info("+---Started")
         self.do_connect()
-        # Load Elements
-        logger.info("+---Loading Modules")
-        self.load_modules()
-        self.create_pipelines()
-        self.create_sensing_stacks()
 
         asyncio.run(self.async_loop())
 
     # could be multiplexed as measurement loops
     async def async_loop(self):
+        # Load Elements
+        logger.info("+---Loading Modules")
+        self.load_modules()
+        self.create_pipelines()
+        self.create_sensing_stacks()
         # Initialise Elements
         logger.info("+---Initialising Modules")
         await self.initialise_interfaces()
