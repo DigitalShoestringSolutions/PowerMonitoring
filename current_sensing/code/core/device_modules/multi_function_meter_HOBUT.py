@@ -130,7 +130,7 @@ class HOBUT_850_LTHN:
 
 
     async def read_modbus_register(self, register):
-        result = self.modbus.read_register(register, 4, self.slave_id)
+        result = self.modbus.read_register(register, 2, self.slave_id)
         if asyncio.iscoroutine(result):
             return await result
         else:
