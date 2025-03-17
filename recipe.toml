@@ -1,0 +1,65 @@
+recipe_vsn = "1.0.0"
+
+[solution]
+    name = "Power Monitoring"
+    slug = "power_monitoring"
+    version = "1.3.0"
+    description = ""
+
+[source.current_sensing]
+    git.path = "sm_SensingDC"
+    git.branch = "rc/1.0.0"
+[source.data_storage]
+    git.path = "DigitalShoestringSolutions/sm_timeseries_db"
+    git.branch = "rc/2.0.0"
+[source.grafana]
+    git.path = "sm_grafana_ui"
+    git.branch = "rc/2.0.0"
+[source.analysis]
+    git.path = "sm_analysis"
+    git.branch = "main"
+[source.mqtt_broker]
+    git.path = "sm_mqtt_broker"
+    git.branch = "rc/2.0.0"
+
+[service_module.current-sensing-1]
+    source="current_sensing"
+    containers = ["sensing"]
+    template.log_level = "warning"
+
+[service_module.current-sensing-2]
+    name = "current-sensing-2"
+    source="current_sensing"
+    containers = ["sensing"]
+
+    template.log_level = "warning"
+
+[service_module.data-storage]
+    source = "data_storage"
+    containers = ["influx","telegraf"]
+    ports.influx.ui = 8086
+    alias.influx = "timeseries-db"
+    
+    template.log_level = "info"
+
+[service_module.dashboards]
+    source = "grafana"
+    containers = ["grafana"]
+    ports.grafana.ui = 3000
+
+[service_module.analysis]
+    source = "analysis"
+    containers = ["analysis-sm"]
+    ports.analysis-sm.api = 8000
+    
+    alias.analysis-sm = "analysis"
+    
+    template.log_level = "info"
+
+
+[infrastructure.mqtt-broker]
+    source = "mqtt_broker"
+    containers = ["broker"]
+    ports.broker.tcp = 1883
+    ports.broker.websocket = 9001
+    alias.broker = "mqtt"
