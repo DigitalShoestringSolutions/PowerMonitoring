@@ -336,9 +336,10 @@
       },
       {
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "Machine_1",
-          "value": "Machine_1"
+          "text": "None",
+          "value": ""
         },
         "datasource": {
           "type": "influxdb",
@@ -440,6 +441,6 @@
   "timezone": "browser",
   "title": "Trend (Individual)",
   "uid": "YrR-YV7Ik",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }

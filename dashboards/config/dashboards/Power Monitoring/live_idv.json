@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 8,
   "links": [
     {
       "asDropdown": true,
@@ -269,7 +269,7 @@
           "refId": "A"
         }
       ],
-      "title": "Voltage",
+      "title": "Measured Voltage",
       "type": "stat"
     },
     {
@@ -579,9 +579,10 @@
       },
       {
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "Machine_1",
-          "value": "Machine_1"
+          "text": "None",
+          "value": ""
         },
         "datasource": {
           "type": "influxdb",
@@ -603,13 +604,13 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Live (Individual)",
   "uid": "UJ85b47Iz",
-  "version": 6,
+  "version": 3,
   "weekStart": ""
 }

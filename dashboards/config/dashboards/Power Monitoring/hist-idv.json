@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 6,
   "links": [
     {
       "asDropdown": true,
@@ -430,7 +430,7 @@
       "type": "stat"
     }
   ],
-  "refresh": "",
+  "refresh": "5s",
   "revision": 1,
   "schemaVersion": 39,
   "tags": [
@@ -448,9 +448,10 @@
       },
       {
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "Machine_1",
-          "value": "Machine_1"
+          "text": "None",
+          "value": ""
         },
         "datasource": {
           "type": "influxdb",
@@ -547,13 +548,13 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Historic (Individual)",
   "uid": "B25PaV7Sk",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }

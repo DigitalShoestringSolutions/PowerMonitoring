@@ -328,9 +328,10 @@
       },
       {
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "Lab_Int_3PU",
-          "value": "Lab_Int_3PU"
+          "text": "None",
+          "value": ""
         },
         "datasource": {
           "type": "influxdb",
@@ -352,13 +353,13 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Live (Individual) (Simple)",
   "uid": "edhihd155ubr4e",
-  "version": 3,
+  "version": 2,
   "weekStart": ""
 }
