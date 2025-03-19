@@ -208,7 +208,7 @@
         ]
       },
       "gridPos": {
-        "h": 16,
+        "h": 18,
         "w": 18,
         "x": 0,
         "y": 0
@@ -366,7 +366,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 6,
         "w": 6,
         "x": 18,
         "y": 0
@@ -427,6 +427,196 @@
         }
       ],
       "title": "Total Energy Usage in Timeframe",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Dashboard --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyGBP"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 6
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "-- Dashboard --"
+          },
+          "panelId": 3,
+          "refId": "A"
+        }
+      ],
+      "title": "Total Cost of Energy in Timeframe",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "total_energy_kWh",
+            "binary": {
+              "left": "total_energy",
+              "operator": "/",
+              "right": "1000"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "total_cost",
+            "binary": {
+              "left": "${cost_pounds_per_kWh}",
+              "operator": "*",
+              "right": "total_energy_kWh"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Dashboard --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "masskg"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 18,
+        "y": 12
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "-- Dashboard --"
+          },
+          "panelId": 3,
+          "refId": "A"
+        }
+      ],
+      "title": "Total CO2 in Timeframe",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "total_energy_kWh",
+            "binary": {
+              "left": "total_energy",
+              "operator": "/",
+              "right": "1000"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "total_co2",
+            "binary": {
+              "left": "${co2_kg_per_kWh}",
+              "operator": "*",
+              "right": "total_energy_kWh"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
       "type": "stat"
     }
   ],
@@ -543,6 +733,48 @@
         "refresh": 2,
         "skipUrlSync": false,
         "type": "interval"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "0.25",
+          "value": "0.25"
+        },
+        "description": "Cost of electricity in GBP per kWh",
+        "hide": 0,
+        "label": "£/kWh",
+        "name": "cost_pounds_per_kWh",
+        "options": [
+          {
+            "selected": true,
+            "text": "0.25",
+            "value": "0.25"
+          }
+        ],
+        "query": "0.25",
+        "skipUrlSync": false,
+        "type": "textbox"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "0.2",
+          "value": "0.2"
+        },
+        "description": "Carbon intensity of electricity in Kg CO2 per kWh",
+        "hide": 0,
+        "label": "Kg CO2 per kWh",
+        "name": "co2_kg_per_kWh",
+        "options": [
+          {
+            "selected": true,
+            "text": "0.2",
+            "value": "0.2"
+          }
+        ],
+        "query": "0.2",
+        "skipUrlSync": false,
+        "type": "textbox"
       }
     ]
   },
