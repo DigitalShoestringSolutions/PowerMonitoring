@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 7,
   "links": [
     {
       "asDropdown": true,
@@ -359,13 +359,13 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Live (All)",
   "uid": "tqo0A-nIk",
-  "version": 6,
+  "version": 1,
   "weekStart": ""
 }
