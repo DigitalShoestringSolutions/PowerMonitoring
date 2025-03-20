@@ -430,7 +430,7 @@
       "type": "stat"
     }
   ],
-  "refresh": "5s",
+  "refresh": "",
   "revision": 1,
   "schemaVersion": 39,
   "tags": [
@@ -548,7 +548,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
