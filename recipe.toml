@@ -18,6 +18,9 @@ recipe_vsn = "1.0.0"
 [source.analysis]
     git.path = "sm_analysis"
     git.branch = "main"
+[source.graph_src]
+    file.path = "./custom_service_modules/graph"
+    file.mode = "link"
 [source.mqtt_broker]
     git.path = "sm_mqtt_broker"
     git.branch = "rc/2.0.0"
@@ -43,6 +46,7 @@ recipe_vsn = "1.0.0"
     source = "grafana"
     containers = ["grafana"]
     ports.grafana.ui = 3000
+    template.disable_sanitise_html = "true"
 
 [service_module.analysis]
     source = "analysis"
@@ -50,6 +54,12 @@ recipe_vsn = "1.0.0"
     ports.analysis-sm.api = 8000
     alias.analysis-sm = "analysis"
     template.log_level = "info"
+
+[service_module.graph]
+    source = "graph_src"
+    containers = ["graph-sm"]
+    alias.graph-sm = "graph"
+    ports.graph-sm.ui = 8080
 
 
 [infrastructure.mqtt-broker]
