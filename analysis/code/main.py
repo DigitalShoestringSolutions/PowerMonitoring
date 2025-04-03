@@ -63,6 +63,9 @@ async def call_route(name, entry, query_params, global_config):
             else:
                 result = function_response
 
+            # Log analysis results. Beware large strings!
+            logger.debug("analysis result:" + str(result))
+
             return result, 200
         else:
             return {"type": "error", "message": "couldn't find function"}, 500
