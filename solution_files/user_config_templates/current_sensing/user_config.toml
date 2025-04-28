@@ -30,11 +30,11 @@
 #module_config_file = "./module_config/pm_a_3p.toml"                   # Three phase
 #
 #   Simulator for testing without sensing hardware:
-module_config_file = "./module_config/pm_b_3pu_mock.toml"              # Basic three phase unbalanced simulator
+module_config_file = "./module_config/{{module_config_file}}.toml"              # Basic three phase unbalanced simulator
 
 
 #   Set the machine name
-calculation.machine_name.config.machine = "Machine_Name_Here"
+calculation.machine_name.config.machine = "{{machine_name}}"
 
 
 #   If using Basic AC hardware, set the ratio of the current transformer clamps (written on the clamp).
