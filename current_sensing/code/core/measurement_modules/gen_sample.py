@@ -5,11 +5,15 @@ import logging
 import statistics
 
 logger = logging.getLogger(__name__)
+DEFAULT_DELAY_CORRECTION_RATIO = 0.01
 
 
 class SingleSample:
     def __init__(self, config):
         self.period = config["period"]
+        self.delay_correction_ratio = config.get(
+            "delay_correction_ratio", DEFAULT_DELAY_CORRECTION_RATIO
+        )
         self.sensing_stack = None
         self.previous_timestamp = None
 
@@ -28,7 +32,7 @@ class SingleSample:
     def __optimise_delay(self):
         if self.previous_timestamp:
             delta = self.period - (time.monotonic() - self.previous_timestamp)
-            self.delay = self.delay + 0.2 * delta
+            self.delay = self.delay + self.delay_correction_ratio * delta
             logger.debug(f"delay: {delta}>>{self.delay}")
         else:
             self.delay = self.period
@@ -45,6 +49,7 @@ class SingleSampleAvg:
     def __init__(self, config):
         self.full_period = config["period"]
         self.n_samples = config["n_samples"]
+        self.delay_correction_ratio = config.get("delay_correction_ratio",DEFAULT_DELAY_CORRECTION_RATIO)
         self.current_sample = 0
         self.sensing_stack = None
         self.samples = []
@@ -84,7 +89,7 @@ class SingleSampleAvg:
 
         if self.previous_target:
             delta = self.previous_target - current_timestamp
-            self.delay_adjustment = self.delay_adjustment + 0.2 * delta
+            self.delay_adjustment = self.delay_adjustment + self.delay_correction_ratio * delta
             # logger.debug(f"""anchor: {self.anchor_timestamp}, fraction: {((self.current_sample + 1) / self.n_samples)},
             # target:{next_target}, current:{current_timestamp}, p_target:{self.previous_target}, delta: {delta},
             # delay_adjustment: {self.delay_adjustment}, b_delay: {base_delay}, delay: {base_delay + self.delay_adjustment}""")
@@ -92,12 +97,15 @@ class SingleSampleAvg:
         else:
             self.delay_adjustment = 0
 
+        self.previous_target = next_target
 
         if base_delay + self.delay_adjustment < 0:
-            logger.warning("Negative delay - resetting adjustment")
-            self.delay_adjustment = 0
+            if (self.full_period / self.n_samples) + self.delay_adjustment < 0:
+                logger.warning("Negative delay - resetting adjustment")
+                self.delay_adjustment = 0
+            else:
+                return 0
 
-        self.previous_target = next_target
         return base_delay + self.delay_adjustment
 
     def __average_variables(self, list):
@@ -124,6 +132,9 @@ class SingleSampleAvg:
 class MultiSampleMerged:
     def __init__(self, config):
         self.period = config["period"]
+        self.delay_correction_ratio = config.get(
+            "delay_correction_ratio", DEFAULT_DELAY_CORRECTION_RATIO
+        )
         self.sensing_stacks = None
         self.previous_timestamp = None
 
@@ -140,11 +151,10 @@ class MultiSampleMerged:
     def __optimise_delay(self):
         if self.previous_timestamp:
             delta = self.period - (time.monotonic() - self.previous_timestamp)
-            self.delay = self.delay + 0.2 * delta
+            self.delay = self.delay + self.delay_correction_ratio * delta
             logger.debug(f"delay: {delta}>>{self.delay}")
         else:
             self.delay = self.period
-
 
         if self.delay < 0:
             logger.warning("Negative delay - resetting to period")
@@ -157,14 +167,15 @@ class MultiSampleMergedAvg:
     def __init__(self, config):
         self.full_period = config["period"]
         self.n_samples = config["n_samples"]
+        self.delay_correction_ratio = config.get(
+            "delay_correction_ratio", DEFAULT_DELAY_CORRECTION_RATIO
+        )
         self.current_sample = 0
         self.sensing_stack = None
         self.samples = []
 
-
         self.anchor_timestamp = None
         self.previous_target = None
-
 
     def initialise(self, sensing_stacks):
         self.sensing_stacks = sensing_stacks
@@ -198,7 +209,7 @@ class MultiSampleMergedAvg:
 
         if self.previous_target:
             delta = self.previous_target - current_timestamp
-            self.delay_adjustment = self.delay_adjustment + 0.2 * delta
+            self.delay_adjustment = self.delay_adjustment + self.delay_correction_ratio * delta
             # logger.debug(f"""anchor: {self.anchor_timestamp}, fraction: {((self.current_sample + 1) / self.n_samples)},
             # target:{next_target}, current:{current_timestamp}, p_target:{self.previous_target}, delta: {delta},
             # delay_adjustment: {self.delay_adjustment}, b_delay: {base_delay}, delay: {base_delay + self.delay_adjustment}""")
@@ -206,11 +217,15 @@ class MultiSampleMergedAvg:
         else:
             self.delay_adjustment = 0
 
-        if base_delay + self.delay_adjustment < 0:
-            logger.warning("Negative delay - resetting adjustment")
-            self.delay_adjustment = 0
-
         self.previous_target = next_target
+
+        if base_delay + self.delay_adjustment < 0:
+            if (self.full_period / self.n_samples) + self.delay_adjustment < 0:
+                logger.warning("Negative delay - resetting adjustment")
+                self.delay_adjustment = 0
+            else:
+                return 0
+
         return base_delay + self.delay_adjustment
 
     def __average_variables(self, list):
@@ -237,6 +252,9 @@ class MultiSampleMergedAvg:
 class MultiSampleIndividual:
     def __init__(self, config):
         self.period = config["period"]
+        self.delay_correction_ratio = config.get(
+            "delay_correction_ratio", DEFAULT_DELAY_CORRECTION_RATIO
+        )
         self.sensing_stacks = None
         self.counter = 0
         self.previous_timestamp = None
@@ -258,7 +276,7 @@ class MultiSampleIndividual:
     def __optimise_delay(self):
         if self.previous_timestamp:
             delta = self.period - (time.monotonic() - self.previous_timestamp)
-            self.delay = self.delay + 0.2 * delta
+            self.delay = self.delay + self.delay_correction_ratio * delta
             logger.debug(f"delay: {delta}>>{self.delay}")
         else:
             self.delay = self.period
@@ -275,6 +293,9 @@ class MultiSampleIndividualAvg:
     def __init__(self, config):
         self.full_period = config["period"]
         self.n_samples = config["n_samples"]
+        self.delay_correction_ratio = config.get(
+            "delay_correction_ratio", DEFAULT_DELAY_CORRECTION_RATIO
+        )
         self.current_sample = 0
         self.sensing_stack = None
         self.samples = None
@@ -323,18 +344,22 @@ class MultiSampleIndividualAvg:
 
         if self.previous_target:
             delta = self.previous_target - current_timestamp
-            self.delay_adjustment = self.delay_adjustment + 0.2 * delta
+            self.delay_adjustment = self.delay_adjustment + self.delay_correction_ratio * delta
             # logger.debug(f"""anchor: {self.anchor_timestamp}, fraction: {((self.current_sample + 1) / self.n_samples)},
             # target:{next_target}, current:{current_timestamp}, p_target:{self.previous_target}, delta: {delta},
             # delay_adjustment: {self.delay_adjustment}, b_delay: {base_delay}, delay: {base_delay + self.delay_adjustment}""")
         else:
             self.delay_adjustment = 0
 
-        if base_delay + self.delay_adjustment < 0:
-            logger.warning("Negative delay - resetting adjustment")
-            self.delay_adjustment = 0
-
         self.previous_target = next_target
+
+        if base_delay + self.delay_adjustment < 0:
+            if (self.full_period/self.n_samples) + self.delay_adjustment < 0:
+                logger.warning("Negative delay - resetting adjustment")
+                self.delay_adjustment = 0
+            else:
+                return 0
+
         return base_delay + self.delay_adjustment
 
     def __average_variables(self, list):
