@@ -36,7 +36,7 @@
 
 #=-= Define Calculation Pipelines =-=
 [pipelines]
-    single_clamp = ["calibrate","machine_name"]
+    single_clamp = ["machine_name","calibrate"]
 
 #=-= Define Measurements Pipelines =-=
 [measurement]
