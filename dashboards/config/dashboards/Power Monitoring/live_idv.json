@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 8,
+  "id": 7,
   "links": [
     {
       "asDropdown": true,
@@ -519,7 +519,7 @@
               }
             ]
           },
-          "unit": "voltamp"
+          "unit": "voltampreact"
         },
         "overrides": []
       },
@@ -611,6 +611,6 @@
   "timezone": "",
   "title": "Live (Individual)",
   "uid": "UJ85b47Iz",
-  "version": 3,
+  "version": 4,
   "weekStart": ""
 }
