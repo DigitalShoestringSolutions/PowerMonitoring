@@ -1,117 +1,199 @@
-from functools import lru_cache
 import logging
-import traceback
-import importlib
 import asyncio
-import argparse
-import uvicorn
+import datetime
 
-from starlette.applications import Starlette
-from starlette.responses import JSONResponse
-from starlette.routing import Route
-from starlette.middleware import Middleware
-from starlette.middleware.cors import CORSMiddleware
+import analysis.general
+from trigger.engine import TriggerEngine
+from pipeline import Pipeline
 
+import format
+import analysis.electrical
+import query.influx
 import config_manager
-
-logger = logging.getLogger("main")
-
-
-@lru_cache
-def get_settings(module_file, user_file):
-    return config_manager.get_config(module_file, user_file)
+import output.influx
 
 
-async def catch_request(request):
-    data, status = await handle_catch(request, request.path_params['full_path'], request.method, request.app.state.settings)
-    return JSONResponse(data, status_code=status)
+logging.basicConfig(level=logging.INFO)
+
+logger = logging.getLogger(__name__)
+logging.getLogger("influxdb_client.client.write_api_async").setLevel(logging.DEBUG)
+
+args = config_manager.handle_args()
+logging.basicConfig(level=args["log_level"])
+config = config_manager.get_config(
+    args.get("module_config_file"), args.get("user_config_file")
+)
+
+trigger = TriggerEngine(config)
+
+"""
+In Chat GPT enter:
+    My cron implementation treats day of week and day of month as an AND. 
+    I don't want logic in a script. What is the cron tab expression for 
+followed by when you want it to run.
+it will give you a set of 5 numbers or characters separated by a space. Put that in the task.
+
+For example: every friday at 17:00 gives:
+0 18 * * 5 your-command
+
+so we would use: "0 18 * * 5"
+
+Another example: fourth friday of the month at 6pm:
+"0 18 22-28 * 5"
+
+Every ten minutes:
+"*/10 * * * *"
+
+"""
+@trigger.scheduler.task("* * * * *") # every minute
+async def calculate_power(last_run=None, execution_time=None,config = {}):
+    pipeline = Pipeline.start()
+    
+    historic_offset = datetime.timedelta(
+        minutes=1
+    )  # calculate back in time to ensure that all data is present
+
+    window_start= last_run - historic_offset
+    window_end = execution_time - historic_offset
+    
+    logger.info(f"\n\n## Calculate power task: {window_start} {window_end}\n")
+
+    await pipeline.next(
+        query.influx.current_and_voltage(config, window_start, window_end)
+    )
+    await pipeline.next(analysis.electrical.calculate_power(config))
+    await pipeline.next(
+        output.influx.write(
+            config,
+            "equipment_power_usage",
+            timestamp_col="_time",
+            tag_cols=["machine"],
+            field_cols=["power_real", "power_apparent"],
+        )
+    )
 
 
-async def handle_catch(
-    request,
-    path,
-    method,
-    settings
-):
+@trigger.http.response("GET","/power")
+async def calculate_latest_power(request_data, config={}):
+    pipeline = Pipeline.start()
 
-    logger.debug(f"Handling {method} on {path}")
-    clean_path = path.strip('/').lstrip('/')
+    query_params = request_data["query"]
+    dt_to_raw = query_params.get("to")[0]
+    machine = query_params.get("machine")[0] if "machine" in query_params else None
 
-    for route_name, route_entry in settings['routes'].items():
-        if route_entry["path"].strip('/').lstrip('/') == clean_path and method.lower() in (m.lower() for m in route_entry["methods"]):
-            return await call_route(route_name, route_entry, request.query_params, settings['config'])
+    dt_to = datetime.datetime.fromisoformat(dt_to_raw)
 
-    return {"type": "error", "message": "no route defined", "details": {"method": method, "path": path}}, 404
-
-
-async def call_route(name, entry, query_params, global_config):
-    module_name = entry["module"]
-    function_name = entry["function"]
-    full_module_name = f"analysis_modules.{module_name}"
-    entry_config = entry.get("config", {})
-
-    try:
-        module = importlib.import_module(full_module_name)
-        logger.debug(f"Imported {module_name}")
-        function = getattr(module, function_name, None)
-        if function:
-            function_response = function(
-                {"params": query_params, "config": entry_config, "global_config": global_config})
-
-            if asyncio.iscoroutine(function_response):
-                result = await function_response
-            else:
-                result = function_response
-
-            # Log analysis results. Beware large strings!
-            logger.debug("analysis result:" + str(result))
-
-            return result, 200
-        else:
-            return {"type": "error", "message": "couldn't find function"}, 500
-    except ModuleNotFoundError:
-        logger.error(
-            f"Unable to import module {module_name}. Service Module may not function as intended")
-        logger.error(traceback.format_exc())
-        return {"type": "error", "message": "unable to import module"}, 500
-    except:
-        logger.error(traceback.format_exc())
-        return {"type": "error", "message": "Something went wrong"}, 500
+    await pipeline.next(query.influx.latest_current_and_voltage(config, dt_to, machine))
+    await pipeline.next(analysis.electrical.calculate_power(config))
+    out_df = pipeline.result
+    out_df["_time"] = out_df["_time"].map(lambda x: x.isoformat())
+    return 200, out_df.to_dict(orient="records")
 
 
-def handle_args():
-    levels = {'debug': logging.DEBUG, 'info': logging.INFO,
-              'warning': logging.WARNING, 'error': logging.ERROR}
-    parser = argparse.ArgumentParser(description='Analysis service module.',
-                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--log", choices=['debug', 'info', 'warning', 'error'], help="Log level", default='info',
-                        type=str)
-    parser.add_argument("--module_config", help="Module config file", type=str)
-    parser.add_argument("--user_config", help="User config file", type=str)
-    args = parser.parse_args()
+@trigger.scheduler.task("*/10 * * * *")
+async def calculate_energy(last_run=None, execution_time=None, config={}):
+    pipeline = Pipeline.start()
 
-    log_level = levels.get(args.log, logging.INFO)
-    module_config_file = args.module_config
-    user_config_file = args.user_config
+    historic_offset = datetime.timedelta(minutes=5) # calculate back in time to ensure that all data is present
 
-    return {"log_level": log_level, "module_config_file": module_config_file, "user_config_file": user_config_file}
+    await pipeline.next(
+        query.influx.real_power(
+            config, last_run - historic_offset, execution_time - historic_offset
+        )
+    )
+    await pipeline.next(analysis.electrical.calculate_energy(config))
+    await pipeline.next(
+        output.influx.write(
+            config,
+            "energy",
+            timestamp_col="_time",
+            tag_cols=["machine"],
+            field_cols=["energy"],
+        )
+    )
+
+@trigger.http.response("GET","/period")
+async def energy_by_period(request_data, config={}):
+    pipeline = Pipeline.start()
+
+    query_params = request_data["query"]
+    logger.info(query_params)
+    dt_to_raw = query_params.get("to")[0]
+    dt_from_raw = query_params.get("from")[0]
+    window = query_params.get("window")[0]
+    machine = query_params.get("machine")[0] if "machine" in query_params else None
+
+    dt_to = datetime.datetime.fromisoformat(dt_to_raw)
+    dt_from = datetime.datetime.fromisoformat(dt_from_raw)
+
+    await pipeline.next(query.influx.energy(config, dt_from,dt_to,window,machine))
+
+    settings_collection = {
+        "1h": {
+            "bucket_function": lambda timestamp: (
+                timestamp.hour,
+                timestamp.strftime("%H:00"),
+            ),
+            "series_function": lambda timestamp: (
+                timestamp.year * 10000 + timestamp.month * 100 + timestamp.day,
+                timestamp.strftime("%d/%m/%Y"),
+            ),
+        },
+        "1d": {
+            "bucket_function": lambda timestamp: (
+                timestamp.weekday(),
+                timestamp.strftime("%A"),
+            ),
+            "series_function": lambda timestamp: (
+                int(timestamp.strftime("%Y%W")),
+                timestamp.strftime("Week %W, %Y"),
+            ),
+        },
+        "1w": {
+            "bucket_function": lambda timestamp: (
+                int(timestamp.strftime("%Y%W")),
+                timestamp.strftime("Week %W"),
+            ),
+            "series_function": lambda timestamp: (
+                timestamp.year,
+                timestamp.strftime("%Y"),
+            ),
+        },
+    }
+
+    settings = settings_collection[window]
+
+    logger.info(pipeline.result.to_string())
+    await pipeline.next(
+        analysis.general.period_over_period_buckets(
+            settings["series_function"], settings["bucket_function"], value_key="energy"
+        )
+    )
+    logger.info(pipeline.result)
+
+    return 200, pipeline.result 
 
 
-if __name__ == "__main__":
-    args = handle_args()
-    logging.basicConfig(level=args['log_level'])
+# @trigger.http.dispatch("GET", "/dispatch/{stuff}")
+# async def test_dispatch(request_data, last_run=None, execution_time=None, config={}):
+#     logger.info(f"DISPATCH: {request_data}")
+#     return
 
-    routes = [
-        Route("/{full_path:path}", endpoint=catch_request,
-              methods=['GET', 'POST']),
-    ]
 
-    middleware = [
-        Middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'],allow_headers=['*'])
-    ]
+# @trigger.mqtt.event("test/#")
+# async def test_event(topic, payload, config={}):
+#     logger.info(f"EVENT # {topic} , {payload}")
 
-    app = Starlette(routes=routes, middleware=middleware)
-    app.state.settings = get_settings(
-        args.get('module_config_file'), args.get('user_config_file'))
 
-    uvicorn.run(app, host="0.0.0.0", port=80, log_level="info")
+# @trigger.mqtt.event("test/a/+")
+# async def test_event(topic, payload, config={}):
+#     logger.info(f"EVENT a/+ {topic} , {payload}")
+
+
+# @trigger.mqtt.event("test/d")
+# @trigger.mqtt.event("test/b/#")
+# async def test_event(topic, payload, config={}):
+#     logger.info(f"EVENT b/# or d {topic} , {payload}")
+
+
+trigger.start()

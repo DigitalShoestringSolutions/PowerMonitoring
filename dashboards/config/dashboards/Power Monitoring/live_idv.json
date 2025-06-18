@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 8,
+  "id": 6,
   "links": [
     {
       "asDropdown": true,
@@ -164,46 +164,23 @@
           },
           "fields": [
             {
-              "jsonPath": "$.[*].power_apparent",
-              "type": "number"
-            },
-            {
-              "jsonPath": "$.[*].timestamp",
-              "language": "jsonpath",
-              "name": "",
-              "type": "time"
+              "jsonPath": "$[0].power_apparent"
             }
           ],
           "method": "GET",
           "params": [
             [
-              "machine",
-              "${machine}"
-            ],
-            [
-              "from",
-              "${__from:date:iso}"
-            ],
-            [
               "to",
               "${__to:date:iso}"
             ],
             [
-              "bucket",
-              "${const_bucket}"
-            ],
-            [
-              "window",
-              "${__interval}"
-            ],
-            [
-              "",
-              ""
+              "machine",
+              "${machine}"
             ]
           ],
           "queryParams": "",
           "refId": "A",
-          "urlPath": "/power/apparent"
+          "urlPath": "/power"
         }
       ],
       "title": "Apparent Power",
@@ -331,42 +308,23 @@
           },
           "fields": [
             {
-              "jsonPath": "$.[*].power_real",
-              "type": "number"
-            },
-            {
-              "jsonPath": "$.[*].timestamp",
-              "language": "jsonpath",
-              "name": "",
-              "type": "time"
+              "jsonPath": "$[0].power_real"
             }
           ],
           "method": "GET",
           "params": [
             [
-              "machine",
-              "${machine}"
-            ],
-            [
-              "from",
-              "${__from:date:iso}"
-            ],
-            [
               "to",
               "${__to:date:iso}"
             ],
             [
-              "bucket",
-              "${const_bucket}"
-            ],
-            [
-              "window",
-              "${__interval}"
+              "machine",
+              "${machine}"
             ]
           ],
           "queryParams": "",
           "refId": "A",
-          "urlPath": "/power/real"
+          "urlPath": "/power"
         }
       ],
       "title": "Real Power",
@@ -579,10 +537,9 @@
       },
       {
         "current": {
-          "isNone": true,
           "selected": false,
-          "text": "None",
-          "value": ""
+          "text": "Machine A",
+          "value": "Machine A"
         },
         "datasource": {
           "type": "influxdb",
@@ -604,13 +561,13 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Live (Individual)",
   "uid": "UJ85b47Iz",
-  "version": 3,
+  "version": 6,
   "weekStart": ""
 }

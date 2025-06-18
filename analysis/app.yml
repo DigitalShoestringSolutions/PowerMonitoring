@@ -5,8 +5,9 @@ services:
     build: .
     command: ["python","main.py","--log","info"]
     environment:
-      - CONFIG__INFLUX__TOKEN=${DB_ADMIN_INITIAL_TOKEN}
+      - INFLUX__TOKEN=${DB_ADMIN_INITIAL_TOKEN}
     ports:
-      - '8000:80'
+      - '80:80'
     volumes:
       - ./config:/app/config:ro
+      - ./data:/app/data
