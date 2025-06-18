@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6,
+  "id": 6
   "links": [
     {
       "asDropdown": true,
@@ -477,7 +477,7 @@
               }
             ]
           },
-          "unit": "voltamp"
+          "unit": "voltampreact"
         },
         "overrides": []
       },
