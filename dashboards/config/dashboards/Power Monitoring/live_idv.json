@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6
+  "id": 5,
   "links": [
     {
       "asDropdown": true,
@@ -137,7 +137,7 @@
         "x": 12,
         "y": 0
       },
-      "id": 3,
+      "id": 10,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -281,7 +281,7 @@
         "x": 12,
         "y": 6
       },
-      "id": 9,
+      "id": 11,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -561,13 +561,13 @@
     ]
   },
   "time": {
-    "from": "now-7d",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Live (Individual)",
   "uid": "UJ85b47Iz",
-  "version": 6,
+  "version": 3,
   "weekStart": ""
 }
