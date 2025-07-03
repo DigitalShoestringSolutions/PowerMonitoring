@@ -5,6 +5,7 @@ import asyncio
 import logging
 import datetime
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.events import EVENT_JOB_ERROR
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,15 @@ class ScheduleTrigger:
         self.deffered_tasks = []
         self.config = config
 
+    def my_listener(self,event):
+        pass
+        # logger.info(f"<><><><><><><> {event.job_id}")
+        # job = self.scheduler.get_job(event.job_id)
+
+        # logger.info(f"============== {job}")
+        # if event.exception:
+        #     logger.info(f"The job crashed {event.exception}    {event}")
+
     async def run(self):
 
         self.scheduler.start()
@@ -35,6 +45,8 @@ class ScheduleTrigger:
         all_jobs = self.scheduler.get_jobs()
         for job in all_jobs:
             job.modify(kwargs={**job.kwargs, "config": self.config})
+
+        self.scheduler.add_listener(self.my_listener, EVENT_JOB_ERROR)
 
         while True:
             await asyncio.sleep(3600)
@@ -68,11 +80,10 @@ class ScheduleTrigger:
                             schedule[k] = schedule_spec[k]
                         else:
                             schedule[k] = v
-                            
+
                     trigger = CronTrigger(*schedule)
                 case str():
                     trigger = CronTrigger.from_crontab(schedule_spec)
-                    
 
             self.scheduler.add_job(
                 func,

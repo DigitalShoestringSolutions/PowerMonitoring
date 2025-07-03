@@ -2,6 +2,7 @@ from functools import lru_cache, cache
 import re
 import datetime
 import logging
+import asyncio
 from influxdb_client.client.influxdb_client_async import InfluxDBClientAsync
 
 
@@ -103,13 +104,22 @@ def energy(config, dt_from,dt_to,window,machine):
 
 def do_query(url, token, org, query, **params):
     async def wrapped(data):
-        async with InfluxDBClientAsync(url=url, token=token, org=org) as client:
-            query_api = client.query_api()
-            data_frame = await query_api.query_data_frame(
-                query, params=params
-            )
+        attempt_count = 1
+        while True:
+            try:
+                async with InfluxDBClientAsync(url=url, token=token, org=org) as client:
+                    query_api = client.query_api()
+                    data_frame = await query_api.query_data_frame(
+                        query, params=params
+                    )
 
-        return data_frame
+                return data_frame
+            except asyncio.TimeoutError:
+                attempt_count += 1
+                if attempt_count <= 3:
+                    logger.warning(f"Retrying due to timeout during influx query - attempt {attempt_count}")
+                else:
+                    raise
 
     return wrapped
 

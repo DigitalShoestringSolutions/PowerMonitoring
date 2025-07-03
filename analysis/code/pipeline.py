@@ -11,7 +11,7 @@ class Pipeline:
     @classmethod
     def start(cls, initial_data={}) -> Self:
         return cls(initial_data)
-    
+
     @property
     def result(self):
         return self.__result
