@@ -13,14 +13,12 @@ Notes to selves while guessing how this is intended to be used
 - `git clone https://github.com/DigitalShoestringSolutions/PowerMonitoring -b experiment/assembler`
 
 ### Assemble & Configure
+- Check `recipe.toml` contains the modules you desire. By defaut there are two machines monitored locally.
 - `cd ~/PowerMonitoring/`
 - `shoestring assemble`
 - Follow the prompts
-  - How to cancel addition of second machine?
-  - How to configure analysis? No prompt for assumed voltage.
 
-## Build
-- `docker compose build`
-
-### Start
-- `docker compose up`
+## Build, Start and Stop
+If you accepted the prompt to `Build the solution now` at the end of Assembling, the solution will build and start immediately.  
+If not, you can manually build with `docker compose build` and start with `docker compose up`.  
+To stop the solution, run `docker compose down`.  
