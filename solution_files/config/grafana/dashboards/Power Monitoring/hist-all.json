@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 3,
   "links": [
     {
       "asDropdown": true,
@@ -81,7 +81,7 @@
               "type": "linear"
             },
             "showPoints": "never",
-            "spanNulls": false,
+            "spanNulls": 60000,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -144,7 +144,7 @@
             "uid": "influxdb"
           },
           "hide": false,
-          "query": "limited_window = if int(v: v.windowPeriod) > int(v: 5s) then v.windowPeriod else 5s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"current\")\r\n  |> aggregateWindow(every: limited_window, fn: mean, createEmpty: false)\r\n  |> pivot(columnKey: [\"_field\"], rowKey: [\"_time\"], valueColumn: \"_value\")\r\n  |> group(columns: [\"machine\",\"_time\"])\r\n  |> sum(column: \"current\")\r\n  |> group(columns: [\"machine\"])\r\n  |> keep(columns: [\"current\",\"_time\",\"machine\"])",
+          "query": "limited_window = if int(v: v.windowPeriod) > int(v: 5s) then v.windowPeriod else 5s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"current\")\r\n  |> aggregateWindow(every: limited_window, fn: mean, createEmpty: true)\r\n  |> pivot(columnKey: [\"_field\"], rowKey: [\"_time\"], valueColumn: \"_value\")\r\n  |> group(columns: [\"machine\",\"_time\"])\r\n  |> sum(column: \"current\")\r\n  |> group(columns: [\"machine\"])\r\n  |> keep(columns: [\"current\",\"_time\",\"machine\"])",
           "refId": "B"
         }
       ],
@@ -162,8 +162,8 @@
     },
     {
       "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "json_api"
+        "type": "influxdb",
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -210,57 +210,30 @@
       "pluginVersion": "10.4.0",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
           "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "json_api"
+            "type": "influxdb",
+            "uid": "influxdb"
           },
-          "experimentalGroupByField": "machine",
-          "experimentalMetricField": "energy",
-          "fields": [
-            {
-              "jsonPath": "$.[*].total_energy",
-              "name": "energy",
-              "type": "number"
-            },
-            {
-              "jsonPath": "$.[*].machine",
-              "language": "jsonpath",
-              "name": "machine",
-              "type": "string"
-            }
-          ],
-          "method": "GET",
-          "params": [
-            [
-              "from",
-              "${__from:date:iso}"
-            ],
-            [
-              "to",
-              "${__to:date:iso}"
-            ],
-            [
-              "bucket",
-              "${const_bucket}"
-            ],
-            [
-              "",
-              ""
-            ]
-          ],
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/energy/total"
+          "query": "limited_window = if int(v: v.windowPeriod) > int(v: 5s) then v.windowPeriod else 5s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"energy\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"energy\")\r\n  |> group(columns:[\"machine\",\"_field\"])\r\n  |> sum()\r\n  |> keep(columns: [\"_value\",\"machine\"])",
+          "refId": "A"
         }
       ],
       "title": "Total Energy Usage in Timeframe",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "_value (.*)",
+            "renamePattern": "$1"
+          }
+        }
+      ],
       "type": "stat"
     },
     {
       "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "json_api"
+        "type": "influxdb",
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -294,7 +267,7 @@
               "type": "linear"
             },
             "showPoints": "never",
-            "spanNulls": false,
+            "spanNulls": 60000,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -339,54 +312,12 @@
       "pluginVersion": "9.4.7",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
           "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "json_api"
+            "type": "influxdb",
+            "uid": "influxdb"
           },
-          "experimentalGroupByField": "machine",
-          "experimentalMetricField": "Real Power",
-          "fields": [
-            {
-              "jsonPath": "$.[*].power_real",
-              "name": "Real Power",
-              "type": "number"
-            },
-            {
-              "jsonPath": "$.[*].timestamp",
-              "language": "jsonpath",
-              "name": "",
-              "type": "time"
-            },
-            {
-              "jsonPath": "$.[*].machine",
-              "language": "jsonpath",
-              "name": "machine",
-              "type": "string"
-            }
-          ],
-          "method": "GET",
-          "params": [
-            [
-              "from",
-              "${__from:date:iso}"
-            ],
-            [
-              "to",
-              "${__to:date:iso}"
-            ],
-            [
-              "window",
-              "${__interval}"
-            ],
-            [
-              "bucket",
-              "${const_bucket}"
-            ]
-          ],
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/power/real"
+          "query": "limited_window = if int(v: v.windowPeriod) > int(v: 5s) then v.windowPeriod else 5s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"equipment_power_usage\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"power_real\")\r\n  |> aggregateWindow(every: limited_window, fn: mean, createEmpty: true)\r\n  |> pivot(columnKey: [\"_field\"], rowKey: [\"_time\"], valueColumn: \"_value\")\r\n  |> keep(columns: [\"power_real\",\"_time\",\"machine\"])",
+          "refId": "A"
         }
       ],
       "title": "Total Power History",
@@ -394,7 +325,7 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": "(.*)",
+            "regex": "power_real (.*)",
             "renamePattern": "$1"
           }
         }
@@ -403,8 +334,8 @@
     },
     {
       "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "json_api"
+        "type": "influxdb",
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -428,7 +359,7 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "stepAfter",
+            "lineInterpolation": "stepBefore",
             "lineStyle": {
               "fill": "solid"
             },
@@ -452,8 +383,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           },
@@ -483,54 +413,12 @@
       "pluginVersion": "9.4.7",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
           "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "json_api"
+            "type": "influxdb",
+            "uid": "influxdb"
           },
-          "experimentalGroupByField": "machine",
-          "experimentalMetricField": "energy",
-          "fields": [
-            {
-              "jsonPath": "$.[*].energy",
-              "language": "jsonpath",
-              "name": "",
-              "type": "number"
-            },
-            {
-              "jsonPath": "$.[*].timestamp",
-              "language": "jsonpath",
-              "name": "",
-              "type": "time"
-            },
-            {
-              "jsonPath": "$.[*].machine",
-              "language": "jsonpath",
-              "name": ""
-            }
-          ],
-          "method": "GET",
-          "params": [
-            [
-              "from",
-              "${__from:date:iso}"
-            ],
-            [
-              "to",
-              "${__to:date:iso}"
-            ],
-            [
-              "bucket",
-              "${const_bucket}"
-            ],
-            [
-              "window",
-              "${bucket}"
-            ]
-          ],
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/energy/bucket"
+          "query": "limited_window = if int(v: v.windowPeriod) > int(v: 5s) then v.windowPeriod else 5s\r\n\r\nfrom(bucket: \"${const_bucket}\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"energy\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"energy\")\r\n  |> aggregateWindow(every: ${bucket}, fn: mean, createEmpty: true)\r\n  |> pivot(columnKey: [\"_field\"], rowKey: [\"_time\"], valueColumn: \"_value\")\r\n  |> keep(columns: [\"energy\",\"_time\",\"phase\",\"machine\"])",
+          "refId": "A"
         }
       ],
       "title": " Total Energy History",
@@ -546,6 +434,7 @@
       "type": "timeseries"
     }
   ],
+  "refresh": "",
   "revision": 1,
   "schemaVersion": 39,
   "tags": [
@@ -566,7 +455,7 @@
         "auto_count": 30,
         "auto_min": "10s",
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "1h",
           "value": "1h"
         },
@@ -639,13 +528,13 @@
     ]
   },
   "time": {
-    "from": "now-2d",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Historic (All)",
   "uid": "sPrzJ-nSk",
-  "version": 2,
+  "version": 11,
   "weekStart": ""
 }

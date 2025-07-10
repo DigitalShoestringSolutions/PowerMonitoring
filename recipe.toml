@@ -16,14 +16,23 @@ recipe_vsn = "1.0.0"
     git.path = "sm_grafana_ui"
     git.branch = "rc/2.0.0"
 [source.analysis]
-    git.path = "sm_analysis"
-    git.branch = "main"
+    file.path = "./custom_service_modules/analysis"
+    file.mode = "link"
+[source.report]
+    file.path = "./custom_service_modules/report"
+    file.mode = "link"
 [source.graph_src]
     file.path = "./custom_service_modules/graph"
     file.mode = "link"
 [source.mqtt_broker]
     git.path = "sm_mqtt_broker"
     git.branch = "rc/2.0.0"
+[source.logging]
+    git.path = "Logging"
+    git.branch = "main"
+[source.plink]
+    git.path = "PlatformLink"
+    git.branch = "main"
 
 [service_module.current-sensing-1]
     source="current_sensing"
@@ -55,6 +64,14 @@ recipe_vsn = "1.0.0"
     alias.analysis-sm = "analysis"
     template.log_level = "info"
 
+
+[service_module.report]
+    source = "report"
+    containers = ["report-sm"]
+    alias.report-sm = "report"
+    ports.report-sm.api=8001
+    template.log_level = "info"
+
 [service_module.graph]
     source = "graph_src"
     containers = ["graph-sm"]
@@ -68,3 +85,15 @@ recipe_vsn = "1.0.0"
     ports.broker.tcp = 1883
     ports.broker.websocket = 9001
     alias.broker = "mqtt"
+[infrastructure.logging]
+    source = "logging"
+    containers = ["alloy","loki"]
+    ports.loki.api = 3100
+    alias.loki = "loki"
+    alias.alloy = "alloy"
+    volume.alloy.docker_sock = "/var/run/docker.sock"
+[infrastructure.platform_link]
+    source = "plink"
+    containers = ["link"]
+    ports.link.ui = 80
+    alias.link = "platform_link"

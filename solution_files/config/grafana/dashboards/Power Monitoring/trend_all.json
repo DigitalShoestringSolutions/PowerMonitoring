@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 8,
   "links": [
     {
       "asDropdown": true,
@@ -70,8 +70,8 @@
     },
     {
       "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "json_api"
+        "type": "influxdb",
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -121,49 +121,12 @@
       "pluginVersion": "10.4.0",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
           "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "json_api"
+            "type": "influxdb",
+            "uid": "influxdb"
           },
-          "fields": [
-            {
-              "jsonPath": "$.[*].energy",
-              "type": "number"
-            },
-            {
-              "jsonPath": "$.[*].timestamp",
-              "language": "jsonpath",
-              "name": "",
-              "type": "time"
-            }
-          ],
-          "method": "GET",
-          "params": [
-            [
-              "from",
-              "${__from:date:iso}"
-            ],
-            [
-              "to",
-              "${__to:date:iso}"
-            ],
-            [
-              "window",
-              "${period}"
-            ],
-            [
-              "bucket",
-              "${const_bucket}"
-            ],
-            [
-              "total",
-              "true"
-            ]
-          ],
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/period/top10"
+          "query": "from(bucket: \"power_monitoring\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"energy\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"energy\")\r\n  |> group()\r\n  |> pivot(columnKey: [\"_field\"], rowKey: [\"_time\"], valueColumn: \"_value\")\r\n  |> aggregateWindow(every: ${period}, fn: sum, createEmpty: false, timeSrc:\"_start\", column: \"energy\")\r\n  |> keep(columns: [\"_time\",\"energy\"])\r\n  |> sort(desc: true,columns: [\"energy\"])\r\n  |> limit(n:10)",
+          "refId": "A"
         }
       ],
       "title": "Top 10 energy usage periods",
@@ -190,8 +153,8 @@
     },
     {
       "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "json_api"
+        "type": "influxdb",
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -214,7 +177,7 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "stepAfter",
+            "lineInterpolation": "stepBefore",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -231,6 +194,7 @@
             }
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -254,7 +218,7 @@
         "x": 0,
         "y": 16
       },
-      "id": 9,
+      "id": 10,
       "options": {
         "legend": {
           "calcs": [],
@@ -269,55 +233,19 @@
       },
       "targets": [
         {
-          "cacheDurationSeconds": 300,
           "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "json_api"
+            "type": "influxdb",
+            "uid": "influxdb"
           },
-          "fields": [
-            {
-              "jsonPath": "$.[*].energy",
-              "type": "number"
-            },
-            {
-              "jsonPath": "$.[*].timestamp",
-              "language": "jsonpath",
-              "name": "",
-              "type": "time"
-            }
-          ],
-          "method": "GET",
-          "params": [
-            [
-              "from",
-              "${__from:date:iso}"
-            ],
-            [
-              "to",
-              "${__to:date:iso}"
-            ],
-            [
-              "window",
-              "${period}"
-            ],
-            [
-              "bucket",
-              "${const_bucket}"
-            ],
-            [
-              "total",
-              "true"
-            ]
-          ],
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/energy/bucket"
+          "query": "from(bucket: \"power_monitoring\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"energy\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"energy\")\r\n  |> group()\r\n  |> pivot(columnKey: [\"_field\"], rowKey: [\"_time\"], valueColumn: \"_value\")\r\n  |> aggregateWindow(every: ${period}, fn: sum, createEmpty: true, timeSrc:\"_start\", column: \"energy\")",
+          "refId": "A"
         }
       ],
       "title": "Energy over Timeframe",
       "type": "timeseries"
     }
   ],
+  "refresh": "",
   "revision": 1,
   "schemaVersion": 39,
   "tags": [
@@ -336,8 +264,8 @@
       {
         "current": {
           "selected": false,
-          "text": "hour",
-          "value": "10m"
+          "text": "day",
+          "value": "1h"
         },
         "hide": 0,
         "includeAll": false,
@@ -346,12 +274,12 @@
         "name": "period",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "hour",
             "value": "10m"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "day",
             "value": "1h"
           },
@@ -366,7 +294,7 @@
             "value": "1w"
           }
         ],
-        "query": "hour : 10m, day : 1h, week : 1d, year : 1w",
+        "query": "day : 1h, week : 1d, year : 1w",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
@@ -381,8 +309,8 @@
       {
         "current": {
           "selected": false,
-          "text": "Line",
-          "value": "line"
+          "text": "Bar",
+          "value": "bar"
         },
         "hide": 0,
         "includeAll": false,
@@ -391,12 +319,12 @@
         "name": "graph",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "Line",
             "value": "line"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "Bar",
             "value": "bar"
           }
@@ -416,6 +344,6 @@
   "timezone": "browser",
   "title": "Trend (All)",
   "uid": "i6b8d74Ik",
-  "version": 2,
+  "version": 13,
   "weekStart": ""
 }
