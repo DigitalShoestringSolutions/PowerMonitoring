@@ -12,7 +12,7 @@ MQTTBroker=v1.0
 InfluxDB=v1.1
 
 # Dashboard
-Grafana=v1.1
+Grafana=v1.2
 
 
 # Bespoke service modules 'Graph' and 'Analysis' are shipped with the solution 
