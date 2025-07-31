@@ -1,7 +1,2 @@
 data/**
-user_config/**
-logs/**
-solution_files/sources/**
-file_sm_sources/**
-compose.yml
-console_log.html
+assembled/**
