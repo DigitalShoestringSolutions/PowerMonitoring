@@ -120,7 +120,7 @@ async def calculate_energy(last_run=None, execution_time=None, config={}):
     # Pipeline: fetch real power -> compute energy -> write to InfluxDB
     await pipeline.next(
         query.influx.real_power(
-            config, last_run - historic_offset, execution_time - historic_offset
+            config, last_run - historic_offset, execution_time - historic_offset + datetime.timedelta(seconds=7.5)
         )
     )
     await pipeline.next(analysis.electrical.calculate_energy(config))
