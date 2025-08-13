@@ -263,9 +263,10 @@
       },
       {
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "Machine A",
-          "value": "Machine A"
+          "text": "None",
+          "value": ""
         },
         "datasource": {
           "type": "influxdb",
