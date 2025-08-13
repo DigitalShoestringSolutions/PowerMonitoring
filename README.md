@@ -1,24 +1,27 @@
-Notes to selves while guessing how this is intended to be used
+Notes to selves while guessing how this is intended to be used.  
+Goal is to outline a robust process that will allow alpha testing.  
+Hopefully many of these steps can be later removed.  
 
 ### Install pipx
 - `sudo apt install pipx`
 - `pipx ensurepath`
 - `sudo reboot` for PATH changes to take effect
 
-### Install assembler
-- `pipx install shoestring-assembler`
-- ` pipx upgrade shoestring-assembler` in case an old version is already installed
+### Shoestring Setup (Install shoestring assembler and docker)
+- `sudo pipx run shoestring-setup`
+- `pipx upgrade shoestring-assembler` (in case you have an old version)
 
 ### Download solution files
-- `git clone https://github.com/DigitalShoestringSolutions/PowerMonitoring -b experiment/assembler`
+- `shoestring app`
+- Use the `Download` button to select power monitoring. Select any release tag (none of them will work as none are assembler compatible yet).
+- Expect `Exception: <shoestring_assembler.interface.state_machine.steps.PromptNoRecipe object at 0x7ffedbb3db10>`
+- Switch to this branch `git -C PowerMonitoring checkout experiment/assembler`
 
 ### Assemble & Configure
-- Check `recipe.toml` contains the modules you desire. By defaut there are two machines monitored locally.
-- `cd ~/PowerMonitoring/`
-- `shoestring assemble`
+- Back into `shoestring app`
+- Reconfigure
 - Follow the prompts
 
 ## Build, Start and Stop
-If you accepted the prompt to `Build the solution now` at the end of Assembling, the solution will build and start immediately.  
-If not, you can manually build with `docker compose build` and start with `docker compose up`.  
-To stop the solution, run `docker compose down`.  
+If you accepted the prompt to `Build the solution now` at the end of Reconfiguring, the solution will build and start immediately.  
+Otherwise use the buttons in `shoestring app`.
