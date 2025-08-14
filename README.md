@@ -1,13 +1,24 @@
-# Power Monitoring Starter Solution
+Notes to selves while guessing how this is intended to be used
 
-## Download
-Clone this repo: `git clone https://github.com/DigitalShoestringSolutions/PowerMonitoring`
-<!--tag/branch deliberately not included in above until release published. Head of default branch will do for now. -->
-## Configure
-Edit the text files at `/current_sensing/config/user_config.toml` and `/analysis/config/user_config.toml`
-## Build
-Build using docker: `docker compose build`
-## Run
-Run using the `./start.sh` script. 
-## Usage
-View Grafana dashboards in a web browser: `localhost:3000` 
+### Install pipx
+- `sudo apt install pipx`
+- `pipx ensurepath`
+- `sudo reboot` for PATH changes to take effect
+
+### Install assembler
+- `pipx install shoestring-assembler`
+- ` pipx upgrade shoestring-assembler` in case an old version is already installed
+
+### Download solution files
+- `git clone https://github.com/DigitalShoestringSolutions/PowerMonitoring -b experiment/assembler`
+
+### Assemble & Configure
+- Check `recipe.toml` contains the modules you desire. By defaut there are two machines monitored locally.
+- `cd ~/PowerMonitoring/`
+- `shoestring assemble`
+- Follow the prompts
+
+## Build, Start and Stop
+If you accepted the prompt to `Build the solution now` at the end of Assembling, the solution will build and start immediately.  
+If not, you can manually build with `docker compose build` and start with `docker compose up`.  
+To stop the solution, run `docker compose down`.  
