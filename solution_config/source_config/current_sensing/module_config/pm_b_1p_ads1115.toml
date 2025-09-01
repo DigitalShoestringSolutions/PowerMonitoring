@@ -62,7 +62,7 @@
     n_samples = 5
 [[measurement.sensing_stacks]]
     device = "adc_0"
-    pipeline = "single_clamp"
+    pipeline = "rms_current"
     constants = {'phase'='single'}
 
 [output.overall]

@@ -47,7 +47,7 @@
 
 #=-= Define Calculation Pipelines =-=
 [pipelines]
-    single_clamp = ["machine_name","calibrate"]
+    dc_pipeline = ["machine_name","calibrate"]
 
 #=-= Define Measurements Pipelines =-=
 [measurement]
@@ -58,7 +58,7 @@
     n_samples = 5
 [[measurement.sensing_stacks]]
     device = "adc_0"
-    pipeline = "single_clamp"
+    pipeline = "dc_pipeline"
     constants = {'phase'='single'}
 
 [output.overall]
