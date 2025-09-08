@@ -6,7 +6,7 @@
 [power_factor]
 
     # If the machine name is not found in the list below, the following default will be used:
-    default = 1
+    default = {{default_power_factor_value}}
 
     # Set a custom value for each machine here
     [power_factor.machines]
@@ -20,7 +20,7 @@
 [voltage_line_neutral]
 
      # If the machine name is not found in the list below, the following default will be used:
-     default = 230
+     default = {{default_voltage_value}}
 
     # Set a custom value for each machine here
     [voltage_line_neutral.machines]
