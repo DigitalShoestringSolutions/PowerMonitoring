@@ -8,13 +8,13 @@ recipe_vsn = "1.0.0"
 
 [source.current_sensing]
     git.path = "sm_SensingDC"
-    git.branch = "rc/1.0.0"
+    git.tag = "v1.0.0"
 [source.data_storage]
-    git.path = "DigitalShoestringSolutions/sm_timeseries_db"
-    git.branch = "rc/2.0.0"
+    git.path = "sm_timeseries_db"
+    git.tag = "v2.0.0"
 [source.grafana]
     git.path = "sm_grafana_ui"
-    git.branch = "rc/2.0.0"
+    git.tag = "v2.0.0"
 [source.analysis]
     file.path = "./custom_service_modules/analysis"
     file.mode = "link"
@@ -26,13 +26,13 @@ recipe_vsn = "1.0.0"
     file.mode = "link"
 [source.mqtt_broker]
     git.path = "sm_mqtt_broker"
-    git.branch = "rc/2.0.0"
+    git.tag = "v2.0.0"
 [source.logging]
     git.path = "Logging"
-    git.branch = "main"
+    git.tag = "v1.0.0"
 [source.plink]
     git.path = "PlatformLink"
-    git.branch = "main"
+    git.tag = "v1.0.0"
 
 [service_module.current-sensing-1]
     source="current_sensing"
