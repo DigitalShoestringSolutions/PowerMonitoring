@@ -39,17 +39,11 @@ recipe_vsn = "1.0.0"
     containers = ["sensing"]
     template.log_level = "warning"
 
-[service_module.current-sensing-2]
-    source="current_sensing"
-    containers = ["sensing"]
-    template.log_level = "warning"
-
 [service_module.data-storage]
     source = "data_storage"
     containers = ["influx","telegraf"]
     ports.influx.ui = 8086
     alias.influx = "timeseries-db"
-    template.log_level = "info"
 
 [service_module.dashboards]
     source = "grafana"

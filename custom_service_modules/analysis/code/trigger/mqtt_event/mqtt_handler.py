@@ -52,6 +52,9 @@ class MQTTHandler:
             for func in function_set:
                 await func(topic, payload, config=config)
         self.msg_queue = []
+        
+    def has_entries(self):
+        return self.topic_map.size() > 0
 
 
 def recursive_search(tokens, current_tree_level: SimpleTreeNode):

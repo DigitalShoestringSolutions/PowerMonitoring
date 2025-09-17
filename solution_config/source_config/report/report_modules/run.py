@@ -56,8 +56,7 @@ Examples:
 
 
 # Scheduled task that runs every friday at 6pm summarising the week's power usage
-# @trigger.scheduler.task("0 18 * * 5")
-@trigger.scheduler.task("*/10 * * * *")
+@trigger.scheduler.task("0 18 * * 5")
 async def weekly_report(last_run=None, execution_time=None, config={}):
     pipeline = Pipeline.start()
 

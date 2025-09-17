@@ -2,7 +2,14 @@
 class SimpleTreeNode:
     def __init__(self):
         self.__value = set()
-        self.__next = {}
+        self.__next: dict[str,SimpleTreeNode] = {}
+        
+    def size(self):
+        own_size = len(self.__value)
+        child_sizes = 0
+        for child in self.__next.values():
+            child_sizes += child.size()
+        return own_size + child_sizes
 
     def setValue(self, value):
         self.__value = value

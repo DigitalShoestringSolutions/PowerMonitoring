@@ -15,13 +15,14 @@ async def get_all_request_data(request):
     )
     return {"url": url_vars, "query": query_params, "body": body_data}
 
+
 class HTTPTrigger:
     def __init__(self, scheduler, config):
         self.app = aiohttp.web.Application()
         self.scheduler = scheduler
         self.config = config
 
-    def register_response(self,method,path,func):
+    def register_response(self, method, path, func):
         async def request_response_wrapper(request):
             request_data = await get_all_request_data(request)
 
@@ -35,31 +36,40 @@ class HTTPTrigger:
         self.app.router.add_route(method, path, request_response_wrapper)
 
     # this is a decorator
-    def response(self,method, path):
+    def response(self, method, path):
         def inner(func):
-            self.register_response(method,path,func)
+            self.register_response(method, path, func)
             return func
+
         return inner
 
-    def register_dispatch(self,method,path,func):
+    def register_dispatch(self, method, path, func):
         async def dispatch_task_wrapper(request):
             request_data = await get_all_request_data(request)
 
-            schedule_success = self.scheduler.schedule_soon(func, [request_data], {"config":self.config})
+            schedule_success = self.scheduler.schedule_soon(
+                func, [request_data], {"config": self.config}
+            )
 
             if schedule_success:
-                return aiohttp.web.json_response({"status":"task submitted", "task":func.__name__},status=200)
+                return aiohttp.web.json_response(
+                    {"status": "task submitted", "task": func.__name__}, status=200
+                )
             else:
                 return aiohttp.web.json_response(status=500)
 
         self.app.router.add_route(method, path, dispatch_task_wrapper)
 
     # this is a decorator
-    def dispatch(self,method, path):
+    def dispatch(self, method, path):
         def inner(func):
-            self.register_dispatch(method,path,func)
-            return func  
+            self.register_dispatch(method, path, func)
+            return func
+
         return inner
+
+    def should_run(self):
+        return len(self.app.router._resources) > 0
 
     # This is the coroutine that runs the server
     async def run(self):

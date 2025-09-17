@@ -10,6 +10,9 @@ class MQTTTrigger:
     def __init__(self, config):
         self.mqtt_handler = MQTTHandler()
         self.config = config
+        
+    def should_run(self):
+        return self.mqtt_handler.has_entries()
 
     async def run(self,broker, port=1883):
         mqttc = MQTTClient(CallbackAPIVersion.VERSION2)

@@ -107,7 +107,7 @@ def do_query(url, token, org, query, **params):
         attempt_count = 1
         while True:
             try:
-                async with InfluxDBClientAsync(url=url, token=token, org=org) as client:
+                async with InfluxDBClientAsync(url=url, token=token, org=org, timeout=60000) as client:
                     query_api = client.query_api()
                     data_frame = await query_api.query_data_frame(
                         query, params=params
