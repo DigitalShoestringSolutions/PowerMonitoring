@@ -1,5 +1,3 @@
-**/__pycache__/*
-**/data/*
-!**/.gitkeep
-start_local.sh
-.todo
+data/**
+assembled/**
+console_log.html

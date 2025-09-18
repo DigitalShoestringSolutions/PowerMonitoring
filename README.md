@@ -1,13 +1,28 @@
-# Power Monitoring Starter Solution
+Notes to selves while guessing how this is intended to be used.  
+Goal is to outline a robust process that will allow alpha testing.  
+Hopefully many of these steps can be later removed.  
 
-## Download
-Clone this repo: `git clone https://github.com/DigitalShoestringSolutions/PowerMonitoring`
-<!--tag/branch deliberately not included in above until release published. Head of default branch will do for now. -->
-## Configure
-Edit the text files at `/current_sensing/config/user_config.toml` and `/analysis/config/user_config.toml`
-## Build
-Build using docker: `docker compose build`
-## Run
-Run using the `./start.sh` script. 
-## Usage
-View Grafana dashboards in a web browser: `localhost:3000` 
+### Install pipx
+- `sudo apt install pipx`
+- `pipx ensurepath`
+- ~~`sudo reboot` for PATH changes to take effect~~ (not needed if running ensurepath - and even ensurepath shouldn't be needed as `~/.local/bin` is typically already on the PATH)
+
+### Shoestring Setup (Install shoestring assembler and docker)
+- `sudo pipx run shoestring-setup`
+- ~~`pipx upgrade shoestring-assembler` (in case you have an old version)~~ (not needed - updated by shoestring setup)
+
+### Download solution files
+- `shoestring app`
+- Use the `Download` button to select power monitoring. Select any release tag (none of them will work as none are assembler compatible yet).
+- Expect `Exception: <shoestring_assembler.interface.state_machine.steps.PromptNoRecipe object at 0x7ffedbb3db10>`
+- Switch to this branch `git -C PowerMonitoring checkout experiment/assembler`
+
+### Assemble & Configure
+- Back into `shoestring app`
+- (If it doesn't show - click find and locate the install location)
+- Reconfigure
+- Follow the prompts
+
+## Build, Start and Stop
+If you accepted the prompt to `Build the solution now` at the end of Reconfiguring, the solution will build and start immediately.  
+Otherwise use the buttons in `shoestring app`.

@@ -1,0 +1,93 @@
+recipe_vsn = "1.0.0"
+
+[solution]
+    name = "Power Monitoring"
+    slug = "power_monitoring"
+    version = "2.0.0"
+    description = "Shoestring Power Monitoring Starter Solution"
+
+[source.current_sensing]
+    git.path = "sm_SensingDC"
+    git.tag = "v1.0.0"
+[source.data_storage]
+    git.path = "sm_timeseries_db"
+    git.tag = "v2.0.0"
+[source.grafana]
+    git.path = "sm_grafana_ui"
+    git.tag = "v2.0.0"
+[source.analysis]
+    file.path = "./custom_service_modules/analysis"
+    file.mode = "link"
+[source.report]
+    file.path = "./custom_service_modules/report"
+    file.mode = "link"
+[source.graph_src]
+    file.path = "./custom_service_modules/graph"
+    file.mode = "link"
+[source.mqtt_broker]
+    git.path = "sm_mqtt_broker"
+    git.tag = "v2.0.0"
+[source.logging]
+    git.path = "Logging"
+    git.tag = "v1.0.0"
+[source.plink]
+    git.path = "PlatformLink"
+    git.tag = "v1.0.0"
+
+[service_module.current-sensing-1]
+    source="current_sensing"
+    containers = ["sensing"]
+    template.log_level = "warning"
+
+[service_module.data-storage]
+    source = "data_storage"
+    containers = ["influx","telegraf"]
+    ports.influx.ui = 8086
+    alias.influx = "timeseries-db"
+
+[service_module.dashboards]
+    source = "grafana"
+    containers = ["grafana"]
+    ports.grafana.ui = 3000
+    template.disable_sanitise_html = "true"
+
+[service_module.analysis]
+    source = "analysis"
+    containers = ["analysis-sm"]
+    ports.analysis-sm.api = 8000
+    alias.analysis-sm = "analysis"
+    template.log_level = "info"
+
+
+[service_module.report]
+    source = "report"
+    containers = ["report-sm"]
+    alias.report-sm = "report"
+    ports.report-sm.api=8001
+    template.log_level = "info"
+
+[service_module.graph]
+    source = "graph_src"
+    containers = ["graph-sm"]
+    alias.graph-sm = "graph"
+    ports.graph-sm.ui = 8080
+
+
+[infrastructure.mqtt-broker]
+    source = "mqtt_broker"
+    containers = ["broker"]
+    ports.broker.tcp = 1883
+    ports.broker.websocket = 9001
+    alias.broker = "mqtt"
+[infrastructure.logging]
+    source = "logging"
+    containers = ["alloy","loki"]
+    ports.loki.api = 3100
+    alias.loki = "loki"
+    alias.alloy = "alloy"
+    volume.alloy.docker_sock = "/var/run/docker.sock"
+[infrastructure.platform_link]
+    source = "plink"
+    containers = ["link"]
+    ports.link.ui = 80
+    alias.link = "platform_link"
