@@ -1,19 +1,19 @@
-## Install pipx
-- `sudo apt install pipx -y`
+# Power Monitoring Starter Solution
 
-## Shoestring Setup (Install shoestring assembler and docker)
+## Install the Shoestring App
+In the terminal, run:
+- `sudo apt instll pipx -y`
 - `sudo pipx run shoestring-setup`
-- `sudo reboot` 
+- `sudo reboot` if prompted to restart
 
-## Download solution files
-- `shoestring app`
-- Use the `Download` button to select power monitoring.
-- Select the latest release and `Continue`
+## Use the Shoestring App to download and configure this Solution
+- In the terminal run `shoestring app`, or double click the desktop icon called `Shoestring`.  
+- Use the `Download` button and select Power Monitoring. Select the latest release tag.  
 - Accept the default install location
 - Accept the prompt to Assemble now
 
 ## Configure
-- Edit each tab to configure each service module.
+- Edit each tab to configure each service module. For Power Monitoring, you will need to configure `current-sensing` and optionally `analysis`.
 
 ## Build, Start and Stop
 If you accepted the prompts to `Build the solution now` and `Start the solution now` at the end of Configuring, the solution will build and start immediately.  
