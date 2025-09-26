@@ -18,3 +18,10 @@ In the terminal, run:
 ## Build, Start and Stop
 If you accepted the prompts to `Build the solution now` and `Start the solution now` at the end of Configuring, the solution will build and start immediately.  
 Otherwise use the buttons in `shoestring app`.
+
+# Dashboards
+Once the solution is started, open the web browser on the Pi and head to `localhost:3000`. The dashboards available there include:
+
+<img width="1919" height="985" alt="image" src="https://github.com/user-attachments/assets/0c805978-f8e1-429e-bba0-581bd632f4f3" />
+
+<img width="1910" height="782" alt="image" src="https://github.com/user-attachments/assets/846825a4-4553-4807-be6c-0d0aaa7ac3b2" />
