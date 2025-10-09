@@ -16,8 +16,8 @@ recipe_vsn = "1.0.0"
     git.path = "sm_grafana_ui"
     git.tag = "v2.0.0"
 [source.analysis]
-    file.path = "./custom_service_modules/analysis"
-    file.mode = "link"
+    git.path = "sm_analysis"
+    git.tag = "v0.2.0"
 [source.report]
     file.path = "./custom_service_modules/report"
     file.mode = "link"
