@@ -3,7 +3,7 @@ recipe_vsn = "1.0.0"
 [solution]
     name = "Power Monitoring"
     slug = "power_monitoring"
-    version = "2.0.0"
+    version = "2.1.1"
     description = "Shoestring Power Monitoring Starter Solution"
 
 [source.current_sensing]
