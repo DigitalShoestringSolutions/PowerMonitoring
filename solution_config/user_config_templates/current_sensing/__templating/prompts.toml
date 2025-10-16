@@ -187,11 +187,17 @@
 [OUT.machine_name]
   var = "machine_name"
 
+[OUT.variant]
+  var = "variant"
+
 [OUT.clamp_rating]
   var = "clamp_rating"
 
 [OUT.adc_channel_0]
   var = "adc_channel_0" 
+
+[OUT.setup_basic]
+  var = "setup_basic"
 
 [OUT.adc_channel_1]  
   var = "adc_channel_1"
