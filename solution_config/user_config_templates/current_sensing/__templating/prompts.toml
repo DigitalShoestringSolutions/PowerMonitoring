@@ -78,12 +78,12 @@
   prompt = "Which ADC channel is the first current clamp plugged into"
 
 [Q.adc_channel_1]
-  criteria = "variant=basic&setup_basic=3u"
+  criteria = "variant=basic & setup_basic=3u"
   type = "text"
   prompt = "Which ADC channel is the second current clamp plugged into"
 
 [Q.adc_channel_2]
-  criteria = "variant=basic&setup_basic=3u"
+  criteria = "variant=basic & setup_basic=3u"
   type = "text"
   prompt = "Which ADC channel is the third current clamp plugged into"
 
@@ -93,94 +93,95 @@
   value = "pm_b_3pu_mock.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_1&setup_basic=single"
+  criteria = "variant=basic & adc=grove_1 & setup_basic=single"
   value = "pm_b_1p_grove_v1.0.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_1&setup_basic=3b"
+  criteria = "variant=basic & adc=grove_1 & setup_basic=3b"
   value = "pm_b_3pb_grove_v1.0.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_1&setup_basic=3u"
+  criteria = "variant=basic & adc=grove_1 & setup_basic=3u"
   value = "pm_b_3pu_grove_v1.0.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_1&setup_basic=dc"
+  criteria = "variant=basic & adc=grove_1 & setup_basic=dc"
   value = "pm_dc_gravity_grove_v1.0.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_11&setup_basic=single"
+  criteria = "variant=basic & adc=grove_11 & setup_basic=single"
   value = "pm_b_1p_grove_v1.1.toml"  
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_11&setup_basic=3b"
+  criteria = "variant=basic & adc=grove_11 & setup_basic=3b"
   value = "pm_b_3pb_grove_v1.1.toml" 
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_11&setup_basic=3u"
+  criteria = "variant=basic & adc=grove_11 & setup_basic=3u"
   value = "pm_b_3pu_grove_v1.1.toml" 
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_11&setup_basic=dc"
+  criteria = "variant=basic & adc=grove_11 & setup_basic=dc"
   value = "pm_dc_gravity_grove_v1.1.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=ads&setup_basic=single"
+  criteria = "variant=basic & adc=ads & setup_basic=single"
   value = "pm_b_1p_ads1115.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=ads&setup_basic=3b"
+  criteria = "variant=basic & adc=ads & setup_basic=3b"
   value = "pm_b_3pb_ads1115.toml"  
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=ads&setup_basic=3u"
+  criteria = "variant=basic & adc=ads & setup_basic=3u"
   value = "pm_b_3pu_ads1115.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=ads&setup_basic=dc"
+  criteria = "variant=basic & adc=ads & setup_basic=dc"
   value = "pm_dc_gravity_ads1115.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=bcr&setup_basic=single"
+  criteria = "variant=basic & adc=bcr & setup_basic=single"
   value = "pm_b_1p_bc_robotics.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=bcr&setup_basic=3b"
+  criteria = "variant=basic & adc=bcr & setup_basic=3b"
   value = "pm_b_3pb_bc_robotics.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=bcr&setup_basic=3u"
+  criteria = "variant=basic & adc=bcr & setup_basic=3u"
   value = "pm_b_3pu_bc_robotics.toml" 
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=bcr&setup_basic=dc"
+  criteria = "variant=basic & adc=bcr & setup_basic=dc"
   value = "pm_dc_gravity_bc_robotics.toml"
+
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=sequent&setup_basic=single"
+  criteria = "variant=basic & adc=sequent & setup_basic=single"
   value = "pm_b_1p_sequent.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=sequent&setup_basic=3b"
+  criteria = "variant=basic & adc=sequent & setup_basic=3b"
   value = "pm_b_3pb_sequent.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=sequent&setup_basic=3u"
+  criteria = "variant=basic & adc=sequent & setup_basic=3u"
   value = "pm_b_3pu_sequent.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=intermediate&setup_int=1p"
+  criteria = "variant=intermediate & setup_int=1p"
   value = "pm_i_1p.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=intermediate&setup_int=3p"
+  criteria = "variant=intermediate & setup_int=3p"
   value = "pm_i_3p.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=advanced&setup_adv=1p"
+  criteria = "variant=advanced & setup_adv=1p"
   value = "pm_a_1p.toml" 
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=advanced&setup_adv=3p"
+  criteria = "variant=advanced & setup_adv=3p"
   value = "pm_a_3p.toml"
 
 [OUT.machine_name]
