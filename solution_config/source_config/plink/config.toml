@@ -1,5 +1,5 @@
 solution_type = "power_monitoring"
-solution_version = "v2.0.0"
+solution_version = "v2.1.1"
 
 # These are the defaults for these settings.
 # they can be modified using the control panel 
