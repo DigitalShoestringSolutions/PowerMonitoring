@@ -44,6 +44,13 @@
   opt.bcr = "BC Robotics"
   opt.sequent = "Sequent 16 channel Universal Inputs ADC"
 
+[Q.phases]
+  criteria = "variant=intermediate | variant=advanced"
+  type = "select"
+  prompt = "How many phases are you monitoring?"
+  opt.1p = "single phase"
+  opt.3p = "three phase"
+
 [Q.setup_basic]
   criteria = "variant=basic"
   type = "select"
@@ -57,20 +64,6 @@
   criteria = "variant=basic"
   type = "text"
   prompt = "What is the rating of the current clamp being used?"
-
-[Q.setup_int]
-  criteria = "variant=intermediate"
-  type = "select"
-  prompt = "How many phases are you monitoring?"
-  opt.1p = "single phase"
-  opt.3p = "three phase"
-
-[Q.setup_adv]
-  criteria = "variant=advanced"
-  type = "select"
-  prompt = "How many phases are you monitoring?"
-  opt.1p = "single"
-  option.3p = "three"  
 
 [Q.adc_channel_0]
   criteria = "variant=basic"
@@ -169,19 +162,19 @@
   value = "pm_b_3pu_sequent.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=intermediate & setup_int=1p"
+  criteria = "variant=intermediate & phases=1p"
   value = "pm_i_1p.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=intermediate & setup_int=3p"
+  criteria = "variant=intermediate & phases=3p"
   value = "pm_i_3p.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=advanced & setup_adv=1p"
+  criteria = "variant=advanced & phases=1p"
   value = "pm_a_1p.toml" 
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=advanced & setup_adv=3p"
+  criteria = "variant=advanced & phases=3p"
   value = "pm_a_3p.toml"
 
 [OUT.machine_name]
