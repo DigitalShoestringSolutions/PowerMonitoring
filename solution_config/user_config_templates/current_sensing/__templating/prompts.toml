@@ -28,7 +28,7 @@
 
 [Q.variant]
   type = "select"
-  prompt = "Which power monitoring variant are you deploying"
+  prompt = "Which power monitoring variant are you deploying?"
   opt.basic = "basic"
   opt.intermediate = "intermediate"
   opt.advanced = "advanced"
@@ -37,7 +37,7 @@
 [Q.adc]
   criteria = "variant=basic"
   type = "select"
-  prompt = "Which ADC are you using"
+  prompt = "Which ADC are you using?"
   opt.grove_1 = "Grove ADC v1.0"
   opt.grove_11 = "Grove ADC v1.1"
   opt.ads = "ADS1115"
@@ -47,7 +47,7 @@
 [Q.setup_basic]
   criteria = "variant=basic"
   type = "select"
-  prompt = "Which sensing configuration are you using"
+  prompt = "Which sensing configuration are you using?"
   opt.single = "Single phase"
   opt.3b = "Three phase balanced (single clamp)"
   opt.3u = "Three phase unbalanced"
@@ -56,36 +56,36 @@
 [Q.clamp_rating]
   criteria = "variant=basic"
   type = "text"
-  prompt = "What is the rating of the current clamp being used"
+  prompt = "What is the rating of the current clamp being used?"
 
 [Q.setup_int]
   criteria = "variant=intermediate"
   type = "select"
-  prompt = "How many phases are you monitoring"
+  prompt = "How many phases are you monitoring?"
   opt.1p = "single phase"
   opt.3p = "three phase"
 
 [Q.setup_adv]
   criteria = "variant=advanced"
   type = "select"
-  prompt = "How many phases are you monitoring"
+  prompt = "How many phases are you monitoring?"
   opt.1p = "single"
   option.3p = "three"  
 
 [Q.adc_channel_0]
   criteria = "variant=basic"
   type = "text"
-  prompt = "Which ADC channel is the first current clamp plugged into"
+  prompt = "Which ADC channel is the first current clamp plugged into?"
 
 [Q.adc_channel_1]
   criteria = "variant=basic & setup_basic=3u"
   type = "text"
-  prompt = "Which ADC channel is the second current clamp plugged into"
+  prompt = "Which ADC channel is the second current clamp plugged into?"
 
 [Q.adc_channel_2]
   criteria = "variant=basic & setup_basic=3u"
   type = "text"
-  prompt = "Which ADC channel is the third current clamp plugged into"
+  prompt = "Which ADC channel is the third current clamp plugged into?"
 
 
 [[OUT.module_config_file.map]]
