@@ -55,7 +55,7 @@
   criteria = "variant=basic"
   type = "select"
   prompt = "Which sensing configuration are you using?"
-  opt.single = "Single phase"
+  opt.1p = "Single phase"
   opt.3b = "Three phase balanced (single clamp)"
   opt.3u = "Three phase unbalanced"
   opt.dc = "Gravity DC current sensor" 
@@ -86,7 +86,7 @@
   value = "pm_b_3pu_mock.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic & adc=grove_1 & setup_basic=single"
+  criteria = "variant=basic & adc=grove_1 & setup_basic=1p"
   value = "pm_b_1p_grove_v1.0.toml"
 
 [[OUT.module_config_file.map]]
@@ -102,7 +102,7 @@
   value = "pm_dc_gravity_grove_v1.0.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic & adc=grove_11 & setup_basic=single"
+  criteria = "variant=basic & adc=grove_11 & setup_basic=1p"
   value = "pm_b_1p_grove_v1.1.toml"  
 
 [[OUT.module_config_file.map]]
@@ -118,7 +118,7 @@
   value = "pm_dc_gravity_grove_v1.1.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic & adc=ads & setup_basic=single"
+  criteria = "variant=basic & adc=ads & setup_basic=1p"
   value = "pm_b_1p_ads1115.toml"
 
 [[OUT.module_config_file.map]]
@@ -134,7 +134,7 @@
   value = "pm_dc_gravity_ads1115.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic & adc=bcr & setup_basic=single"
+  criteria = "variant=basic & adc=bcr & setup_basic=1p"
   value = "pm_b_1p_bc_robotics.toml"
 
 [[OUT.module_config_file.map]]
@@ -150,7 +150,7 @@
   value = "pm_dc_gravity_bc_robotics.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic & adc=sequent & setup_basic=single"
+  criteria = "variant=basic & adc=sequent & setup_basic=1p"
   value = "pm_b_1p_sequent.toml"
 
 [[OUT.module_config_file.map]]
