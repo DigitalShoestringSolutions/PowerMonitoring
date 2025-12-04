@@ -19,3 +19,6 @@ device.adc_0.config.adc_channel = {{adc_channel_0}}
 device.adc_1.config.adc_channel = {{adc_channel_1}}                          # If using multiple clamps
 device.adc_2.config.adc_channel = {{adc_channel_2}}                           # If using multiple clamps
 {% endif %}
+
+mqtt.broker = "{{mqtt_broker}}"
+

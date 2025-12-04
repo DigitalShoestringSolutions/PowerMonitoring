@@ -87,6 +87,10 @@
   type = "text"
   prompt = "Which ADC channel is the third current clamp plugged into"
 
+[Q.mqtt_broker]
+  type = "text"
+  prompt = "Which MQTT broker should the current sensing module send the data to?"
+
 
 [[OUT.module_config_file.map]]
   criteria = "variant=simulator"
@@ -204,6 +208,10 @@
 
 [OUT.adc_channel_2]
   var = "adc_channel_2"
+
+[OUT.mqtt_broker]
+  var = "mqtt_broker"
+
 
 # Note: The following lines are examples of how to reference the answers in the user configuration template.
 # For example, in user_config.toml, you can use {{machine_name}} to insert the machine name provided by the user.
