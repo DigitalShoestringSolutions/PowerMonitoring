@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 3,
   "links": [
     {
       "asDropdown": true,
@@ -80,6 +80,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -92,7 +93,7 @@
         "textMode": "value_and_name",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -143,6 +144,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -154,7 +156,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "cacheDurationSeconds": 300,
@@ -223,6 +225,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -235,7 +238,7 @@
         "textMode": "value_and_name",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -287,6 +290,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -298,7 +302,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "cacheDurationSeconds": 300,
@@ -367,6 +371,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -379,7 +384,7 @@
         "textMode": "value",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -390,7 +395,7 @@
           "refId": "A"
         }
       ],
-      "title": "Frequency",
+      "title": "Measured Frequency",
       "type": "stat"
     },
     {
@@ -430,6 +435,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -442,7 +448,7 @@
         "textMode": "value",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -493,6 +499,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -504,7 +511,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -569,6 +576,6 @@
   "timezone": "",
   "title": "Live (Individual)",
   "uid": "UJ85b47Iz",
-  "version": 3,
+  "version": 2,
   "weekStart": ""
 }

@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 7,
+  "id": 4,
   "links": [
     {
       "asDropdown": true,
@@ -69,7 +69,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
+        "h": 18,
         "w": 12,
         "x": 0,
         "y": 0
@@ -80,6 +80,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -92,7 +93,7 @@
         "textMode": "value_and_name",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -132,7 +133,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 9,
         "w": 12,
         "x": 12,
         "y": 0
@@ -143,6 +144,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -154,7 +156,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "cacheDurationSeconds": 300,
@@ -213,10 +215,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 9,
         "w": 12,
         "x": 12,
-        "y": 6
+        "y": 9
       },
       "id": 11,
       "options": {
@@ -224,6 +226,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -235,7 +238,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "cacheDurationSeconds": 300,
@@ -318,6 +321,6 @@
   "timezone": "",
   "title": "Live (Individual) (Simple)",
   "uid": "edhihd155ubr4e",
-  "version": 4,
+  "version": 2,
   "weekStart": ""
 }

@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 6,
   "links": [
     {
       "asDropdown": true,
@@ -64,7 +64,7 @@
         "content": " <iframe id=\"embeddedFrame\" src=\"#\" width=\"100%\" height=\"100%\"> </iframe>\r\n<script>\r\nvar iframe = document.getElementById(\"embeddedFrame\");\r\n    iframe.src = \"http://\"+window.location.hostname+\"${graph_sm}\"+\"/period?bucket=${const_bucket}&window=${period}&machine=${machine}&from=${__from:date:iso}&to=${__to:date:iso}&graph=${graph}\"\r\n\r\n    function setIframeHeight() {\r\n      iframe.style.height = iframe.parentElement.offsetHeight + \"px\";\r\n    }\r\n\r\n    // Call setIframeHeight when the iframe content is loaded\r\n    //iframe.onload = setIframeHeight;\r\n\r\n    window.addEventListener(\"resize\", setIframeHeight);\r\n</script>",
         "mode": "html"
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.1.3",
       "title": "Period over Period Comparison [Energy usage kWh]",
       "type": "text"
     },
@@ -100,7 +100,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 12,
+        "h": 15,
         "w": 6,
         "x": 18,
         "y": 0
@@ -118,7 +118,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "10.4.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -144,6 +144,7 @@
               "_start": "Period",
               "_time": "Time",
               "_value": "Value",
+              "energy": "Energy",
               "power_real": "Average Power",
               "timestamp": "Timestamp"
             }
@@ -363,6 +364,6 @@
   "timezone": "browser",
   "title": "Trend (Individual)",
   "uid": "YrR-YV7Ik",
-  "version": 11,
+  "version": 2,
   "weekStart": ""
 }
