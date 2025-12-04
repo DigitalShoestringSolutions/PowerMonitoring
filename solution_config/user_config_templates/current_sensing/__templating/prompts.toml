@@ -28,7 +28,7 @@
 
 [Q.variant]
   type = "select"
-  prompt = "Which power monitoring variant are you deploying"
+  prompt = "Which power monitoring variant are you deploying?"
   opt.basic = "basic"
   opt.intermediate = "intermediate"
   opt.advanced = "advanced"
@@ -37,18 +37,25 @@
 [Q.adc]
   criteria = "variant=basic"
   type = "select"
-  prompt = "Which ADC are you using"
+  prompt = "Which ADC are you using?"
   opt.grove_1 = "Grove ADC v1.0"
   opt.grove_11 = "Grove ADC v1.1"
   opt.ads = "ADS1115"
   opt.bcr = "BC Robotics"
   opt.sequent = "Sequent 16 channel Universal Inputs ADC"
 
+[Q.phases]
+  criteria = "variant=intermediate | variant=advanced"
+  type = "select"
+  prompt = "How many phases are you monitoring?"
+  opt.1p = "single phase"
+  opt.3p = "three phase"
+
 [Q.setup_basic]
   criteria = "variant=basic"
   type = "select"
-  prompt = "Which sensing configuration are you using"
-  opt.single = "Single phase"
+  prompt = "Which sensing configuration are you using?"
+  opt.1p = "Single phase"
   opt.3b = "Three phase balanced (single clamp)"
   opt.3u = "Three phase unbalanced"
   opt.dc = "Gravity DC current sensor" 
@@ -56,36 +63,22 @@
 [Q.clamp_rating]
   criteria = "variant=basic"
   type = "text"
-  prompt = "What is the rating of the current clamp being used"
-
-[Q.setup_int]
-  criteria = "variant=intermediate"
-  type = "select"
-  prompt = "How many phases are you monitoring"
-  opt.1p = "single phase"
-  opt.3p = "three phase"
-
-[Q.setup_adv]
-  criteria = "variant=advanced"
-  type = "select"
-  prompt = "How many phases are you monitoring"
-  opt.1p = "single"
-  option.3p = "three"  
+  prompt = "What is the rating of the current clamp being used?"
 
 [Q.adc_channel_0]
   criteria = "variant=basic"
   type = "text"
-  prompt = "Which ADC channel is the first current clamp plugged into"
+  prompt = "Which ADC channel is the first current clamp plugged into?"
 
 [Q.adc_channel_1]
   criteria = "variant=basic & setup_basic=3u"
   type = "text"
-  prompt = "Which ADC channel is the second current clamp plugged into"
+  prompt = "Which ADC channel is the second current clamp plugged into?"
 
 [Q.adc_channel_2]
   criteria = "variant=basic & setup_basic=3u"
   type = "text"
-  prompt = "Which ADC channel is the third current clamp plugged into"
+  prompt = "Which ADC channel is the third current clamp plugged into?"
 
 [Q.mqtt_broker]
   type = "text"
@@ -97,7 +90,7 @@
   value = "pm_b_3pu_mock.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic & adc=grove_1 & setup_basic=single"
+  criteria = "variant=basic & adc=grove_1 & setup_basic=1p"
   value = "pm_b_1p_grove_v1.0.toml"
 
 [[OUT.module_config_file.map]]
@@ -113,7 +106,7 @@
   value = "pm_dc_gravity_grove_v1.0.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic & adc=grove_11 & setup_basic=single"
+  criteria = "variant=basic & adc=grove_11 & setup_basic=1p"
   value = "pm_b_1p_grove_v1.1.toml"  
 
 [[OUT.module_config_file.map]]
@@ -129,7 +122,7 @@
   value = "pm_dc_gravity_grove_v1.1.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic & adc=ads & setup_basic=single"
+  criteria = "variant=basic & adc=ads & setup_basic=1p"
   value = "pm_b_1p_ads1115.toml"
 
 [[OUT.module_config_file.map]]
@@ -145,7 +138,7 @@
   value = "pm_dc_gravity_ads1115.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic & adc=bcr & setup_basic=single"
+  criteria = "variant=basic & adc=bcr & setup_basic=1p"
   value = "pm_b_1p_bc_robotics.toml"
 
 [[OUT.module_config_file.map]]
@@ -161,7 +154,7 @@
   value = "pm_dc_gravity_bc_robotics.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic & adc=sequent & setup_basic=single"
+  criteria = "variant=basic & adc=sequent & setup_basic=1p"
   value = "pm_b_1p_sequent.toml"
 
 [[OUT.module_config_file.map]]
@@ -173,19 +166,19 @@
   value = "pm_b_3pu_sequent.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=intermediate & setup_int=1p"
+  criteria = "variant=intermediate & phases=1p"
   value = "pm_i_1p.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=intermediate & setup_int=3p"
+  criteria = "variant=intermediate & phases=3p"
   value = "pm_i_3p.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=advanced & setup_adv=1p"
+  criteria = "variant=advanced & phases=1p"
   value = "pm_a_1p.toml" 
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=advanced & setup_adv=3p"
+  criteria = "variant=advanced & phases=3p"
   value = "pm_a_3p.toml"
 
 [OUT.machine_name]
