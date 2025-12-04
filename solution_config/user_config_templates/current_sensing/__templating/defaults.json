@@ -4,5 +4,6 @@
     "clamp_rating": "20",
     "adc_channel_0": "0",
     "adc_channel_1": "2",
-    "adc_channel_2": "4"
+    "adc_channel_2": "4",
+    "mqtt_broker": "mqtt.docker.local"
 }
