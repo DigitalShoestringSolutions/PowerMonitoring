@@ -7,7 +7,7 @@ recipe_vsn = "1.0.0"
 [solution]
     name = "Power Monitoring"
     slug = "power_monitoring"
-    version = "2.2.1"
+    version = "2.2.2"
     description = "Shoestring Power Monitoring Starter Solution"
 
 
@@ -37,12 +37,12 @@ recipe_vsn = "1.0.0"
     alias.analysis-sm = "analysis"
     template.log_level = "info"
 
-[service_module.report]
-    source = "report"
-    containers = ["report-sm"]
-    alias.report-sm = "report"
-    ports.report-sm.api=8001
-    template.log_level = "info"
+#[service_module.report]
+#    source = "report"
+#    containers = ["report-sm"]
+#    alias.report-sm = "report"
+#    ports.report-sm.api=8001
+#    template.log_level = "info"
 
 [service_module.graph]
     source = "graph_src"
@@ -91,7 +91,7 @@ recipe_vsn = "1.0.0"
 
 [source.analysis]
     git.path = "sm_analysis"
-    git.tag = "v0.2.2"
+    git.tag = "v0.2.3"
 
 [source.report]
     file.path = "./custom_service_modules/report"
@@ -107,7 +107,7 @@ recipe_vsn = "1.0.0"
 
 [source.logging]
     git.path = "Logging"
-    git.tag = "v1.0.0"
+    git.tag = "v1.0.1"
 
 [source.plink]
     git.path = "PlatformLink"

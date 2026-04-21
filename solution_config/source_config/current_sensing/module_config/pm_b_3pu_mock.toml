@@ -10,8 +10,8 @@
     class="MockDeviceRandom"
     interface="dummy"
 [device.adc_0.config]
-    min=18000
-    max=20000
+    min=1
+    max=1
 [device.adc_0.variables]
     variable = "v_amp_out"
 
@@ -20,8 +20,8 @@
     class="MockDeviceRandom"
     interface="dummy"
 [device.adc_1.config]
-    min=16000
-    max=18000
+    min=2
+    max=2
 [device.adc_1.variables]
     variable = "v_amp_out"
 
@@ -30,8 +30,8 @@
     class="MockDeviceRandom"
     interface="dummy"
 [device.adc_2.config]
-    min=16000
-    max=19000
+    min=3
+    max=3
 [device.adc_2.variables]
     variable = "v_amp_out"
 
