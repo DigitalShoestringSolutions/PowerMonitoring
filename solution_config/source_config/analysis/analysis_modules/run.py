@@ -64,8 +64,13 @@ async def calculate_power(last_run=None, execution_time=None, config={}):
     historic_offset = datetime.timedelta(minutes=1)
     window_start = last_run - historic_offset
     window_end = execution_time - historic_offset
-
+    
     logger.info(f"## Calculate power task: {window_start} {window_end}")
+    
+    if window_end-window_start > datetime.timedelta(days=1):
+        logger.error("Power window exceeds a day - skipping")
+        return
+        
 
     # Pipeline steps: fetch data -> compute power -> write results
     await pipeline.next(
@@ -110,11 +115,19 @@ async def calculate_energy(last_run=None, execution_time=None, config={}):
     pipeline = Pipeline.start()
 
     historic_offset = datetime.timedelta(minutes=5)
+    window_start = last_run - historic_offset
+    window_end = execution_time - historic_offset
+    
+    logger.info(f"## Calculate energy task: {window_start} {window_end}")
+    
+    if window_end-window_start > datetime.timedelta(days=1):
+        logger.error("Power window exceeds a day - skipping")
+        return
 
     # Pipeline: fetch real power -> compute energy -> write to InfluxDB
     await pipeline.next(
         query.influx.real_power(
-            config, last_run - historic_offset, execution_time - historic_offset
+            config, window_start, window_end
         )
     )
     await pipeline.next(analysis.electrical.calculate_energy(config))
