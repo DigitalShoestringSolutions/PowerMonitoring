@@ -7,7 +7,7 @@ recipe_vsn = "1.0.0"
 [solution]
     name = "Power Monitoring"
     slug = "power_monitoring"
-    version = "2.2.2"
+    version = "2.2.3"
     description = "Shoestring Power Monitoring Starter Solution"
 
 
