@@ -15,9 +15,18 @@ import { Line, Bar } from 'react-chartjs-2';
 import autocolors from 'chartjs-plugin-autocolors';
 import APIBackend from './RestAPI'
 
-import * as dayjs from 'dayjs'
-import * as weekOfYear from 'dayjs/plugin/weekOfYear';
-import * as advancedFormat from 'dayjs/plugin/advancedFormat';
+import dayjs from 'dayjs'
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+
+
+// Set up react-query
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery
+} from '@tanstack/react-query'
+const queryClient = new QueryClient()
 
 import './app.css'
 
@@ -85,7 +94,7 @@ export const options = {
         label: function (context) {
           let point = context.raw;
           let series = context.dataset.label
-          let label= series+" "+(point/1000).toFixed(2) + ' kWh';
+          let label = series + " " + (point / 1000).toFixed(2) + ' kWh';
           return label;
         }
       }
@@ -112,82 +121,64 @@ export const options = {
   }
 };
 
+export function useConfig() {
+  return useQuery(
+    {
+      queryKey: ['config'],
+      queryFn: async () => APIBackend.api_get('http://' + document.location.host + '/config/config.json'),
+      select: (data) => (data.payload)
+    }
+  )
+}
+
+export function useEnergyData(config) {
+  let params = new URLSearchParams(window.location.search);
+
+  let url = (config?.source?.host ? config?.source?.host : window.location.hostname) + (config?.source?.port ? ":" + config.source.port : "")
+  let path = window.location.pathname
+
+  let full_url = 'http://' + url + path + "?" + params.toString()
+  console.log(full_url, !!config)
+
+  return useQuery(
+    {
+      queryKey: ['data'],
+      queryFn: async () => APIBackend.api_get(full_url),
+      select: (data) => (data.payload),
+      enabled: !!config
+    }
+  )
+}
+
+
 function App() {
-  let [loaded, setLoaded] = React.useState(false)
-  let [pending, setPending] = React.useState(false)
-  let [error, setError] = React.useState(null)
-  let [config, setConfig] = React.useState(undefined)
-
-  React.useEffect(() => {
-    const do_load = async () => {
-      setPending(true)
-      APIBackend.api_get('http://' + document.location.host + '/config/config.json').then((response) => {
-        if (response.status === 200) {
-          console.log("config ", response.payload)
-          setConfig(response.payload)
-          setLoaded(true)
-        } else {
-          console.log("ERROR LOADING CONFIG")
-          setError("ERROR: Unable to load configuration!")
-        }
-      }).catch((err) => {
-        console.error(err.message);
-        setError("ERROR: Unable to load configuration!")
-      })
-    }
-
-    if (!loaded && !pending) {
-      do_load()
-    }
-  }, [loaded, pending])
-
-  if (!loaded) {
-    return error ? error : "Loading..."
-  }
-
   return (
-    <Graph config={config} />
+    <QueryClientProvider client={queryClient}>
+      <ConfigWrapper />
+    </QueryClientProvider>
   );
 }
 
+function ConfigWrapper(){
+  let { data: config, isLoading: config_Loading, isError: configError, error: config_error } = useConfig()
+
+  console.log(config)
+
+  if (config_Loading || configError) {
+    return config_error ? config_error : "Loading Config..."
+  }
+
+  return <Graph config={config}/>
+}
+
 function Graph({ config }) {
-  let [loaded, setLoaded] = React.useState(false)
-  let [pending, setPending] = React.useState(false)
-  let [error, setError] = React.useState(null)
+  let params = new URLSearchParams(window.location.search);
+  let [type, setType] = React.useState(params.get("graph"))
 
-  let [data, setData] = React.useState({})
-  let [type, setType] = React.useState("line")
+  let { data, isLoading, isError, error } = useEnergyData(config)
+  console.log(data, isLoading || isError, error)
 
-  React.useEffect(() => {
-    const do_load = async () => {
-      setPending(true)
-
-      let params = new URLSearchParams(window.location.search);
-      setType(params.get("graph"))
-
-      let url = (config.source.host ? config.source.host : window.location.hostname) + (config.source.port ? ":" + config.source.port : "")
-      let path = window.location.pathname
-      APIBackend.api_get('http://' + url + path + "?" + params.toString()).then((response) => {
-        if (response.status === 200) {
-          console.log("payload", response.payload)
-          setData(response.payload)
-          setLoaded(true)
-        } else {
-          console.log("ERROR LOADING DATA")
-          setError("ERROR: Unable to load data!")
-        }
-      }).catch((err) => {
-        console.error(err.message);
-        setError("ERROR: Unable to load data!")
-      })
-    }
-
-    if (!loaded && !pending) {
-      do_load()
-    }
-  }, [config, loaded, pending])
-
-  if (!loaded) {
+  if (isLoading || isError) {
     return error ? error : "Loading..."
   }
   if (data?.buckets?.length == 0) {

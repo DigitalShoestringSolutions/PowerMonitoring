@@ -9,7 +9,8 @@
     "dayjs": "^1.11.10",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "@tanstack/react-query": "5.64.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
